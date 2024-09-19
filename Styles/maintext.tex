@@ -36,143 +36,69 @@
 \usepackage{biblatex} %Imports biblatex package
 \addbibresource{bibliography.bib} %Import the bibliography file
 
-\title{Our paper for workshop}
-
-
-% The \author macro works with any number of authors. There are two commands
-% used to separate the names and addresses of multiple authors: \And and \AND.
-%
-% Using \And between authors leaves it to LaTeX to determine where to break the
-% lines. Using \AND forces a line break at that point. So, if LaTeX puts 3 of 4
-% authors names on the first line, and the last on the second line, try using
-% \AND instead of \And before the third author name.
-
+\title{Layout Design with Large Language Models: Opportunities and Challenges}
 
 \author{%
-  David S.~Hippocampus\thanks{Use footnote for providing further information
-    about author (webpage, alternative address)---\emph{not} for acknowledging
-    funding agencies.} \\
-  Department of Computer Science\\
-  Cranberry-Lemon University\\
-  Pittsburgh, PA 15213 \\
-  \texttt{hippo@cs.cranberry-lemon.edu} \\
-  % examples of more authors
-  % \And
-  % Coauthor \\
-  % Affiliation \\
-  % Address \\
-  % \texttt{email} \\
-  % \AND
-  % Coauthor \\
-  % Affiliation \\
-  % Address \\
-  % \texttt{email} \\
-  % \And
-  % Coauthor \\
-  % Affiliation \\
-  % Address \\
-  % \texttt{email} \\
-  % \And
-  % Coauthor \\
-  % Affiliation \\
-  % Address \\
-  % \texttt{email} \\
+  Bo Wen\thanks{IBM Watson Research Center, Yorktown Heights, NY, USA} \\
+  \texttt{bwen@us.ibm.com} \\
+  \And
+  Xin Zhang\thanks{IBM Watson Research Center, Yorktown Heights, NY, USA} \\
+  \texttt{xzhang@us.ibm.com} \\
 }
-
 
 \begin{document}
 
-
 \maketitle
 
-
 \begin{abstract}
-  The abstract paragraph should be indented \nicefrac{1}{2}~inch (3~picas) on
-  both the left- and right-hand margins. Use 10~point type, with a vertical
-  spacing (leading) of 11~points.  The word \textbf{Abstract} must be centered,
-  bold, and in point size 12. Two line spaces precede the abstract. The abstract
-  must be limited to one paragraph.
+  % Update abstract to reflect the content of the paper
+  This paper explores the potential of large language models (LLMs) as a "layout design copilot" in various domains such as semiconductor, IC, and microfluidics. We evaluate the capabilities of LLMs in generating basic elements and combining them into complex designs. Our experiments focus on via connections, microfluidics channel design, and fiducial marker generation. We discuss the opportunities and challenges of using LLMs in layout design, highlighting the importance of providing expert knowledge and context to improve their performance.
 \end{abstract}
 
-
 \section{Introduction}
+% Brief overview of layout design in various domains
+% Challenges in automating repetitive tasks while maintaining flexibility 
+% Potential of large language models (LLMs) as a "layout design copilot"
+% Thesis statement and paper overview
 
+\section{Methodology}
+\subsection{Basic Element Generation}
+% Evaluation of popular LLMs in drawing basic shapes (zero-shot attempt)
+% Suggestion: Present a table showcasing success rates
+% Conclusion: Setting up a RAG system with working example code improves accuracy
 
-intro
+\subsection{Combining Basic Elements into Complicated Designs}
+% Introduction to the three explored use cases
+\paragraph{Via connection in semiconductor process}
+\paragraph{Microfluidics channel design}
+\paragraph{Fiducial marker generation}
 
+\section{Results and Discussion}
+\subsection{Via Connection Experiment}
+% Detailed analysis of the via connection experiment (refer to via.pdf)
+% Discuss the mistakes made by GPT-4 and their potential causes
+% Highlight the importance of providing expert knowledge and context to LLMs
 
-\subsection{Background}
+\subsection{Microfluidics Design}
+% LLMs can guide researchers in estimating channel size based on fluid properties and dynamics
+% Limitations: LLMs struggle with arithmetic calculations and may lack domain expertise
 
+\subsection{Fiducial Marker Generation}
+% LLMs perform well in generating fiducial markers on grids or arrays
+% Advantages over commercial software: flexibility and potential other benefits
 
+\subsection{General Discussion}
+% The importance of spatial thinking, imagination, and understanding of physics for LLMs
+% Need for providing use case requirements and expert knowledge as context to LLMs
 
-
-
-\subsection{XXX}
-
-
-
-
-\paragraph{Preprint option}
-If you wish to post a preprint of your work online, e.g., on arXiv, using the
-NeurIPS style, please use the \verb+preprint+ option. This will create a
-nonanonymized version of your work with the text ``Preprint. Work in progress.''
-in the footer. This version may be distributed as you see fit, as long as you do not say which conference it was submitted to. Please \textbf{do
-  not} use the \verb+final+ option, which should \textbf{only} be used for
-papers accepted to NeurIPS.
-
-
-At submission time, please omit the \verb+final+ and \verb+preprint+
-options. This will anonymize your submission and add line numbers to aid
-review. Please do \emph{not} refer to these line numbers in your paper as they
-will be removed during generation of camera-ready copies.
-
-
-The file \verb+neurips_2024.tex+ may be used as a ``shell'' for writing your
-paper. All you have to do is replace the author, title, abstract, and text of
-the paper with your own.
-
-
-The formatting instructions contained in these style files are summarized in
-Sections \ref{gen_inst}, \ref{headings}, and \ref{others} below.
-
-
-\section{Experiments}
-
-\subsection{Basic Elements}
-\subsection{Test cases}
-\paragraph{metal connecting vias}
-\paragraph{microfluidics}
-
-\section{Discussion}
-
-
-\section{Conclusion}
-
-
-
-\section*{Acknowledgments}
-
-
-
-\section*{References}
-
+\section{Conclusion and Future Work}
+% Recap the main findings and insights
+% Discuss the potential of LLMs in layout design and the challenges to overcome
+% Outline future research directions:
+%   - Dealing with more complicated designs
+%   - Creating a benchmark to test LLM capabilities in layout design tasks
+% Final thoughts on the role of LLMs as a "layout design copilot"
 
 \printbibliography %Prints bibliography
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\appendix
-
-\section{Appendix / supplemental material}
-
-
-Optionally include supplemental material (complete proofs, additional experiments and plots) in appendix.
-All such materials \textbf{SHOULD be included in the main submission.}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-
 
 \end{document}
