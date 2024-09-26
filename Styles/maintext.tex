@@ -36,7 +36,7 @@
 \usepackage{biblatex} %Imports biblatex package
 \addbibresource{bibliography.bib} %Import the bibliography file
 
-\title{Layout Design with Large Language Models: Opportunities and Challenges}
+\title{Semiconductor Layout Design with Large Language Models: Opportunities and Challenges}
 
 \author{%
   Bo Wen\\
@@ -75,7 +75,7 @@
 % Introduction to the three explored use cases
 \paragraph{Via connection in semiconductor process}
 \paragraph{Microfluidics channel design}
-\paragraph{Fiducial marker generation}
+
 
 \section{Results and Discussion}
 \subsection{Via Connection Experiment}
@@ -93,7 +93,7 @@ We conducted a series of tests to evaluate the LLM's performance in generating v
 \end{figure}
 In Test 1, we provided an initial description without a sketch. The LLM generated code based on the description, but the output had several issues, such as incorrect layer placement and missing connectivity. Test 2 involved a modified description, which led to some improvements in the generated code but still had limitations in terms of via placement and metal coverage.
 Test 3 incorporated a detailed description along with the sketch. We performed iterative refinements by providing feedback to the LLM based on its generated code. This process highlighted the importance of clear and specific instructions for achieving the desired layout.
-Test 4 focused on reproducing the best output from the previous tests. We asked the LLM to provide a detailed prompt based on the best output, and then analyzed the effectiveness of the generated prompt in reproducing the desired layout.
+Test 4 focused on reproducing the best output from the previous tests. We asked the LLM to provide a detailed prompt based on the best output, and then analyzed the effectiveness of the generated prompt in reproducing the desired layout. 
 Tests 5-7 progressively added context (e.g., 3D packaging, TSVs) and domain-specific requirements to the input description. The results demonstrated the impact of context and domain knowledge on the LLM's performance, as well as the limitations and potential improvements.
 \subsubsection{Lessons Learned}
 The via connection experiment revealed several key findings:
@@ -124,6 +124,7 @@ To enhance the sketch-to-design approach for via connections, we propose incorpo
 %   - Dealing with more complicated designs
 %   - Creating a benchmark to test LLM capabilities in layout design tasks
 % Final thoughts on the role of LLMs as a "layout design copilot"
+other domains, like mechanics, architecture
 
 \printbibliography %Prints bibliography
 
