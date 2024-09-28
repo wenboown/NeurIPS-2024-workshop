@@ -67,6 +67,27 @@
 
 \section{Methodology}
 \subsection{Basic Element Generation}
+
+We gave LLMs a list of shapes, and asked them to generate code to draw these shapes.
+groups = {
+  'basic_shapes_1': ['Circle', 'Donut', 'Oval', 'Square', 'Triangle', 'Grid'],
+  'basic_shapes_2': ['Hexagon', 'Pentagon', 'Heptagon', 'Octagon', 'Trapezoid', 'Text'],
+  'advanced_shapes': ['Arrow', 'SquareArray', 'Serpentine', 'RoundedSquare', 'BasicLayout', 'Spiral'],
+  'complex_structures': ['MicrofluidicChip', 'ViaConnection', 'FiducialCircle', 'ComplexLayout',
+                         'DLDChip', 'FinFET', 'RectangleWithText']
+}
+llms = [
+  "gpt-4o",
+  "o1-preview",
+  "claude-3-5-sonnet-20240620",
+  "watsonx/meta-llama/llama-3-1-70b-instruct",
+  "watsonx/meta-llama/llama-3-405b-instruct"
+]
+
+
+
+We noticed a few interesting mistakes made by LLMs when generating basic shapes:
+1. Llama models will assume human made mistakes in unit, and change mm to um, and add comments lik ``not mm, as the GDSII format is in micrometers''
 % Evaluation of popular LLMs in drawing basic shapes (zero-shot attempt)
 % Suggestion: Present a table showcasing success rates
 % Conclusion: Setting up a RAG system with working example code improves accuracy
