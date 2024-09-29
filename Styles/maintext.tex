@@ -119,20 +119,7 @@ In \textbf{Test 3}, we gave a more detailed description accompanied by the origi
 
 \textbf{Tests 5} and \textbf{6} gradually incorporated more context, such as 3D packaging, Through-Silicon Vias (TSVs), and other domain-specific requirements. However, adding domain knowledge and context did not improve the LLM's performance much, showcasing both its limitations and areas for potential improvement.  Experienced engineers and researchers understand that connecting two vias requires using a metal layer wider than the diameter of the via. Moreover, vias should not be placed at the very ends of metal layers; some leeway is typically be left between layers to accommodate potential misalignment. % this last part is good. very specific.
 
-These experiments demonstrate that LLMs lack the understanding of how to connect domain-specific knowledge to the geometric requirements of layout design. 
-The experiments demonstrate that LLMs currently lack the domain-specific knowledge possessed by experienced engineers, such as the need for wider metal connections between vias and leeway for misalignment. Despite incorporating more context and domain requirements in\textbf{Tests 5} and \textbf{6}, improvements were minimal, highlighting the gap in the LLM's understanding. Future development should focus on embedding domain-specific rules and enhancing consistency and reproducibility.
-
-
-
-\subsubsection{Lessons Learned}
-The via connection experiment revealed several key findings:
-\begin{itemize}
-\item Clear, detailed, and context-rich input is essential for LLMs to generate accurate layout designs.
-\item Iterative refinement and user feedback play a crucial role in guiding the LLM towards the desired output.
-\item LLMs have limitations in understanding domain-specific requirements and constraints without explicit guidance.
-\end{itemize}
-\subsubsection{Potential Improvements and Future Work}
-To enhance the sketch-to-design approach for via connections, we propose incorporating domain-specific knowledge and design rules into the LLM prompts. This can be achieved by providing a comprehensive set of guidelines and constraints as part of the input description. Additionally, future experiments should focus on validating the effectiveness of the improved approach and exploring its applicability to more complex via connection scenarios.
+Our experiments reveal a critical limitation in LLMs' ability to adapt to domain specific applications. Despite possessing general semiconductor knowledge, LLMs struggle to translate this understanding into accurate spatial relationships, as evident in Tests 5 and 6, where additional domain context did not improve results. Notably, the o1-preview model, with its enhanced reasoning capabilities, demonstrated better performance, suggesting that using domain knowledge to reason about geometric constraints is crucial for advancing their performance in layout design tasks. This finding also highlights that finetuning LLMs to improve reasoning and understanding how to apply domain knowledge in problem-solving is more important than increasing model size to remember more knowledge, which is key to improving the adaptability of LLM-based AI systems.
 
 \section{Neuro-inspired LLM Reasoning Network Architecture}
 
