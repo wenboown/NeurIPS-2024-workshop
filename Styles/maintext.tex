@@ -64,13 +64,10 @@ The semiconductor industry faces significant challenges in automating the layout
 
 While traditional layout design software has struggled to address these challenges, Large Language Models (LLMs) offer a promising solution. LLMs' ability to understand natural language instructions and generate code makes them ideal candidates for a ``layout design copilot''. This new paradigm could allow human designers to focus on high-level tasks requiring creativity and intuition, while the LLM-powered copilot generates or modifies the layout code based on human intent.
 
-In this paper, we explore the capabilities and limitations of LLMs with 25 common semiconductor layout design tasks. Our main contributions are:
-
-1. Evaluating the baseline performance of five state-of-the-art LLMs on layout design tasks with zero-shot prompting; Identifying common errors and proposing how to use Retrieval-Augmented Generation (RAG) and In-Context Learning to address them (Section 2).
-
-2. Documenting an iterative design process of multimodal inputs with GPT-4o for a complex task (ViaConnection), illustrating the limitations of current LLMs in spatial reasoning (Section 3).
-
-3. Introducing a novel Neuro-inspired LLM Reasoning Network architecture that leverages multiple LLMs to improve reasoning capabilities and mitigate hallucinations in layout design tasks. Presenting preliminary results. (Section 4).
+In this paper, we explore the capabilities and limitations of LLMs with 25 common semiconductor layout design tasks. Our main contributions are: 
+(1) Evaluating the baseline performance of five state-of-the-art LLMs on layout design tasks with zero-shot prompting; Identifying common errors and proposing how to use Retrieval-Augmented Generation (RAG) and In-Context Learning to address them (Section 2). 
+(2) Documenting an iterative design process of multimodal inputs with GPT-4o for a complex task (ViaConnection), illustrating the limitations of current LLMs in spatial reasoning (Section 3). 
+(3) Introducing a novel Neuro-inspired LLM Reasoning Network architecture that leverages multiple LLMs to improve reasoning capabilities and mitigate hallucinations in layout design tasks. Presenting preliminary results. (Section 4).
 
 Finally, Section 5 concludes the paper and discusses future research directions.
 
@@ -99,12 +96,12 @@ The results reveal several common mistakes and limitations of standalone LLMs in
 
 Many of these issues can be mitigated by augmenting the LLMs with more advanced setup. For example, using Retrieval-Augmented Generation (RAG) to provide gdspy documentation to the LLMs, we should be able to reduce the errors related to misspelling and hallucinating nonexistent functions. For complex tasks, we can provide example code of simple shapes for In-Context Learning, so the LLMs only need to reason about positioning and scaling, and avoid runtime errors. We will discuss more in Section 3.
 
-\section{Multimodal Inputs and Iterative Reasoning}
+\section{Multimodal Inputs and Spatial Reasoning}
 Layout design in semiconductor processes requires not only generating correct basic geometric shapes but also spatial reasoning to create proper ``layouts'' that meet specific requirements. Via connections, which create electrical pathways between different chip layers, exemplify this challenge. While seemingly simple—typically consisting of circular vias and rectangular metal connections—they demand precise positioning and sizing to ensure no short or open circuits and other functionality issues.
 
 Our baseline experiments revealed that LLMs most frequently producing ``Partially Correct'' outputs in the ViaConnection task as expected. Llama-3.1-405B once, GPT-4o and Llama-3.1-70B twice, Claude-3.5-Sonnet and o1-preview 3 times. This observation motivated us to use ViaConnection as a testbed to further explore LLMs' spatial reasoning capabilities.
 
-We conducted a series of tests by providing a sketch(image) in addition to natural language descriptions to help LLM understand the spatial relationships. The sketch are color-coded to represent different layers (e.g., yellow for via, blue for metal, red for pad). The text prompt specified layer information, dimensions, positions, and connectivity requirements. We only tested GPT-4o because other LLMs lack of vision input capability. Figure \ref{fig:via_experiment} illustrates the sketch inputs and corresponding LLM-generated outputs for each test case.
+We conducted a series of tests by providing a sketch(image) together with text prompt to help LLM understand the spatial relationships. The sketch are color-coded to represent different layers (e.g., yellow for via, blue for metal, red for pad). The text prompt specified layer information, dimensions, positions, and connectivity requirements. We used GPT-4o's vision input capability for this experiment. Figure \ref{fig:via_experiment} illustrates the sketch inputs and corresponding LLM-generated outputs for each test case.
 
 \begin{figure}[!h]
 \centering
