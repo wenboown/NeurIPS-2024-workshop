@@ -71,9 +71,7 @@
 % Suggestion: Present a table showcasing success rates
 % Conclusion: Setting up a RAG system with working example code improves accuracy
 
-25 examples were generated using by chatGPT-4o: prompt --> python --> gdsii, with human evaluation. For the test case that chatgpt failed to achieve at the first try, a researcher interacted with the LLM and guided it step by step to generate the desired correct output. 
-
-However, for serpentine, chatGPT has troubled generating the correct output. (Probably because it didn't know to use gdspy.FlexPath to achieve it. ) An example code was given to chatGPT to "learn" and generate the sample file for serpentine.
+A total of 25 examples were generated using ChatGPT-4o, Python code was generated to write a GDSII files for the desired elements, accompanied by human evaluation. In instances where the model did not produce the correct output on the first attempt, a researcher would provide step-by-step guidance until achieving the desired result. However, in the case of generating a serpentine pattern, the model encountered difficulties, likely due to an unfamiliarity with the \texttt{gdspy.FlexPath} function. To address this, an example code was provided to the model, enabling it to 'learn' and successfully generate the correct serpentine sample file.
 
 \subsection{Combining Basic Elements into Complicated Designs}
 % Introduction to the three explored use cases
@@ -99,10 +97,11 @@ In \textbf{Test 1}, we provided a basic sketch (Figure ~\ref{fig:via_experiment}
 
 In \textbf{Test 3}, we gave a more detailed description accompanied by the original sketch. We proceeded with an iterative process, providing the LLM with feedback and screenshots of the GDSII file generated from its code. After seven iterations, the LLM successfully produced the correct layout. \textbf{Test 4} aimed to reproduce the best output from the previous test. We requested the LLM to create a detailed prompt based on the successful result from Test 3 and used this prompt to attempt to generate the correct output again. However, this approach proved ineffective, indicating that relying solely on an LLM-generated prompt to reproduce a layout was not reliable.
 
-\textbf{Tests 5} and \textbf{6} gradually incorporated more context, such as 3D packaging, Through-Silicon Vias (TSVs), and other domain-specific requirements. However, adding domain knowledge and context did not improve the LLM's performance much, showcasing both its limitations and areas for potential improvement. 
-\textcolor{red}{For experienced engineers/ researchers, they know that to connect two via, a metal that is wider than the diameter of the via would be used. In addition, the via should not be placed at the very end of the metal, there usually some leeway between layers to avoid misalignment. (need to better writing)}
+\textbf{Tests 5} and \textbf{6} gradually incorporated more context, such as 3D packaging, Through-Silicon Vias (TSVs), and other domain-specific requirements. However, adding domain knowledge and context did not improve the LLM's performance much, showcasing both its limitations and areas for potential improvement. Experienced engineers and researchers understand that connecting two vias requires using a metal layer wider than the diameter of the via. Moreover, vias should not be placed at the very ends of metal layers; some leeway is typically allowed between layers to accommodate potential misalignment.
 
-The experiments highlight that LLMs, in their current state, lack the domain-specific knowledge that experienced engineers possess, such as understanding the need for wider metal connections between vias and the importance of allowing leeway between layers to prevent misalignment. The limited improvement observed when adding context and domain-specific requirements in Tests 5 and 6 further emphasizes this gap. These findings suggest that while LLMs show promise in assisting with layout generation, they are not yet capable of replacing human expertise in integrated circuit design. Future development of LLMs for this application should focus on incorporating domain-specific rules and best practices, as well as improving consistency and reproducibility in layout generation. especially when dealing with advanced semiconductor and microfluidics design tasks that demand an expert understanding of fabrication constraints and best practices.
+The experiments demonstrate that LLMs currently lack the domain-specific knowledge possessed by experienced engineers, such as the need for wider metal connections between vias and leeway for misalignment. Despite incorporating more context and domain requirements in Tests 5 and 6, improvements were minimal, highlighting the gap in the LLM's understanding. While LLMs show potential in layout generation, they are not yet ready to replace human expertise, particularly in tasks demanding advanced semiconductor and microfluidics design knowledge. Future development should focus on embedding domain-specific rules and enhancing consistency and reproducibility.
+
+
 
 \subsubsection{Lessons Learned}
 The via connection experiment revealed several key findings:
