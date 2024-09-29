@@ -98,31 +98,30 @@ Figure 2 provides a more detailed view of the interaction between the Thought Ge
 
 The proposed Neuro-inspired LLM Reasoning Network Architecture offers a significant improvement over traditional single-model approaches in terms of zero-shot accuracy and the ability to avoid hallucination-induced mistakes. By leveraging the power of multiple LLMs and incorporating techniques like RAG and continual learning, this architecture enables more effective reasoning and adaptability in complex domains such as semiconductor layout design.
 
-\subsection{Basic Element Generation}
+\section{Baseline LLM Performance in Layout Design}
 
-We gave LLMs a list of shapes, and asked them to generate code to draw these shapes.
-groups = {
-  'basic_shapes_1': ['Circle', 'Donut', 'Oval', 'Square', 'Triangle', 'Grid'],
-  'basic_shapes_2': ['Hexagon', 'Pentagon', 'Heptagon', 'Octagon', 'Trapezoid', 'Text'],
-  'advanced_shapes': ['Arrow', 'SquareArray', 'Serpentine', 'RoundedSquare', 'BasicLayout', 'Spiral'],
-  'complex_structures': ['MicrofluidicChip', 'ViaConnection', 'FiducialCircle', 'ComplexLayout',
-                         'DLDChip', 'FinFET', 'RectangleWithText']
-}
-llms = [
-  "gpt-4o",
-  "o1-preview",
-  "claude-3-5-sonnet-20240620",
-  "watsonx/meta-llama/llama-3-1-70b-instruct",
-  "watsonx/meta-llama/llama-3-405b-instruct"
-]
+We evaluated the performance of five large language models (LLMs) - GPT-4o, o1-preview, Claude-3.5-Sonnet, Llama-3.1-70B, and Llama-3.1-405B - on a set of 25 layout design tasks. These tasks were categorized into four groups: Basic Shapes 1, Basic Shapes 2, Advanced Shapes, and Complex Structures. Figure \ref{fig:baseline-llm-performance} presents a summary of the LLMs' performance across the task categories.
 
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\textwidth]{baseline-llm-performance.png}
+  \caption{Baseline LLM Performance on Layout Design Tasks}
+  \label{fig:baseline-llm-performance}
+\end{figure}
 
+The results reveal several common mistakes and limitations of standalone LLMs in handling layout design tasks:
 
-We noticed a few interesting mistakes made by LLMs when generating basic shapes:
-1. Llama models will assume human made mistakes in unit, and change mm to um, and add comments lik ``not mm, as the GDSII format is in micrometers''
-% Evaluation of popular LLMs in drawing basic shapes (zero-shot attempt)
-% Suggestion: Present a table showcasing success rates
-% Conclusion: Setting up a RAG system with working example code improves accuracy
+\begin{enumerate}
+  \item \textbf{Incorrect scaling}: Many LLMs struggled with correctly scaling the shapes according to the specified units. The default unit in the gdspy library is micrometers, but most of our basic shape requests were in millimeters. LLMs needed to explicitly scale the lengths by 1000 to obtain the correct output. Some LLMs made incorrect assumptions about the default unit, leading to scaling errors.
+  
+  \item \textbf{Partial correctness}: In more complex tasks, LLMs often generated partially correct layouts with mistakes in the relative positioning of shapes. For example, in the ViaConnection task, which involved specific location requirements, only o1-preview achieved a fully correct result. The other LLMs produced partially correct outputs with counts: GPT-4o (2), Claude-3.5-Sonnet (2), Llama-3.1-70B (1), and Llama-3.1-405B (3).
+  
+  \item \textbf{Runtime errors}: Several LLMs generated code that threw exceptions and failed to run. A common error was "AttributeError: module 'gdspy' has no attribute 'LayoutViewer'", which occurred because the LLMs were unaware of the runtime environment. The gdspy version (1.6.3) installed in our Linux VM did not support GUI output, causing this error. Other common errors included AttributeErrors, TypeErrors, and SyntaxErrors, as detailed in the error report (see Appendix).
+  
+  \item \textbf{Inefficient code}: In some cases, the generated code was inefficient or contained potential issues that caused the program to run very slowly or appear to be stuck. For example, in the DLDChip task, the Llama-3.1-405B model generated code that created a large number of objects and performed numerous boolean operations, leading to high memory usage and extended execution time.
+\end{enumerate}
+
+These findings highlight the limitations of standalone LLMs in handling complex layout design tasks. While they perform relatively well on basic shapes, their performance deteriorates as the task complexity increases. The common mistakes and inefficiencies underscore the need for a more advanced approach to tackle these challenges effectively.
 
 A total of 25 examples were generated using ChatGPT-4o, Python code was generated to write a GDSII files for the desired elements, accompanied by human evaluation. In instances where the model did not produce the correct output on the first attempt, a researcher would provide step-by-step guidance until achieving the desired result. However, in the case of generating a serpentine pattern, the model encountered difficulties, likely due to an unfamiliarity with the \texttt{gdspy.FlexPath} function. To address this, an example code was provided to the model, enabling it to 'learn' and successfully generate the correct serpentine sample file.
 
