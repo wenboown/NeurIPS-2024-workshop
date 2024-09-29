@@ -60,21 +60,23 @@
 \end{abstract}
 
 \section{Introduction}
-The semiconductor industry faces numerous challenges in layout design, a critical step in the design and fabrication of integrated circuits (ICs), microfluidic chips, and other electronic devices. One of the most significant challenges is the repetitive nature of drawing similar shapes with minor variations, such as serpentine structures in microfluidic chips with different widths, lengths, number of turns, and tuning radii. \cite{Greengard2024-hx} This repetitive task often violates the "Don't Repeat Yourself" (DRY) principle of software development, leading to inefficiencies and potential inconsistencies in the design process.
+The semiconductor industry faces significant challenges in layout design, a critical step in the development of integrated circuits (ICs), microfluidic chips, and other electronic devices. A key issue is the limited adaptability of current graphical user interface (GUI) based design workflows to diverse application needs. This inflexibility often results in inefficient, repetitive tasks of creating similar structures with minor variations, such as many copies of similar serpentine patterns in microfluidic chips which only differ in width, length, number of turns, and turning radii. This approach not only violates the "Don't Repeat Yourself" (DRY) principle of software development but also leads to potential inconsistencies and reduced productivity in the design process.
 
-Traditional layout design software, which primarily relies on graphical user interfaces (GUIs) rather than scripting-based languages, has struggled to address this issue effectively. However, the advent of Large Language Models (LLMs) presents a new opportunity to revolutionize the layout design process. LLMs have demonstrated remarkable capabilities in understanding natural language instructions, as well as in tasks such as code generation and understanding. By leveraging these capabilities, we can envision a "layout design copilot" that can significantly streamline the design process and improve efficiency.
+Traditional layout design software, primarily relying on GUI-based interactions rather than scripting languages, has struggled to address these adaptability challenges effectively. However, the emergence of Large Language Models (LLMs) presents a promising opportunity to revolutionize the layout design process. LLMs have demonstrated remarkable capabilities in understanding natural language instructions and generating code, making them ideal candidates for creating a "layout design copilot." We can envision a new paradigm of design workflow where human designers provide high-level design intent and the copilot generates the layout code, with the designer playing a more supervisory role and spending more time on high-level tasks that require creativity and intuition.
 
-In this paper, we propose a Neuro-inspired LLM Reasoning Network architecture specifically tailored for adaptive and efficient layout design. Our proposed system allows users to provide natural language instructions to the copilot, describing the desired layout structures and their variations. Additionally, the system can support multimodal inputs, such as sketches, to help communicate the design intent more effectively. The LLM-based copilot then generates code snippets in programming languages like Python, utilizing standard libraries such as gdspy \cite{gdspy} or OASISpy \cite{oasispy} to create GDSII or OASIS files. Furthermore, the copilot can interact with existing layout design software, such as KLayout \cite{klayout}, through APIs or the software's built-in Python environment.
+In this paper, we explore the capabilities and limitations of state-of-the-art Large Language Models (LLMs) in semiconductor layout design tasks. Our main contributions are:
 
-The main contributions of our work are as follows:
+1. Establishing a baseline performance of five state-of-the-art LLMs on 25 common layout design tasks, evaluating their zero-shot capabilities (Section 2).
 
-1. We introduce a novel Neuro-inspired LLM Reasoning Network architecture that leverages multiple LLMs to generate initial layout design attempts, assess their quality, and reach a consensus on the most promising solutions. This architecture enables more robust and accurate layout generation while mitigating the issue of hallucinations.
+2. Analyzing the mistakes made by these LLMs and categorizing common errors in layout design tasks. Our analysis indicates that some of these errors can be addressed by Retrieval-Augmented Generation (RAG) and In-Context Learning (Section 2).
 
-2. We demonstrate the effectiveness of our proposed system in the 25 common semiconductor layout design tasks, showcasing its ability to generate accurate and consistent layouts based on natural language instructions and multimodal inputs.
+3. Documenting an iterative design process of multimodal inputs with GPT-4o for a complex task (ViaConnection), illustrating the limitations of current LLMs in spatial reasoning (Section 3).
 
-3. We conduct a comprehensive evaluation of our system, comparing its performance against the baseline performance of single-model zero-shot prompting approaches of 5 state-of-the-art LLMs. Our results show significant improvements in terms of zero-shot accuracy and the ability to avoid hallucination-induced mistakes.
+4. Introducing a novel Neuro-inspired LLM Reasoning Network architecture that leverages multiple LLMs to improve reasoning capabilities and mitigate hallucinations in layout design tasks (Section 4).
 
-The remainder of this paper is structured as follows: Section 2 describes the Neuro-inspired LLM Reasoning Network architecture in detail, highlighting its key components and their interactions. Section 3 presents our experimental setup and the datasets used for evaluation. Section 4 discusses the results of our experiments, comparing the performance of our proposed system against baseline models and state-of-the-art approaches. Section 5 explores potential future directions and applications of our work. Finally, Section 6 concludes the paper, summarizing our findings and contributions.
+5. Presenting preliminary results demonstrating the effectiveness of our proposed architecture compared to single-LLM baselines (Section 4).
+
+Finally, Section 5 concludes the paper and discusses future research directions.
 
 \section{Neuro-inspired LLM Reasoning Network Architecture}
 
@@ -125,13 +127,6 @@ These findings highlight the limitations of standalone LLMs in handling complex 
 
 A total of 25 examples were generated using ChatGPT-4o, Python code was generated to write a GDSII files for the desired elements, accompanied by human evaluation. In instances where the model did not produce the correct output on the first attempt, a researcher would provide step-by-step guidance until achieving the desired result. However, in the case of generating a serpentine pattern, the model encountered difficulties, likely due to an unfamiliarity with the \texttt{gdspy.FlexPath} function. To address this, an example code was provided to the model, enabling it to 'learn' and successfully generate the correct serpentine sample file.
 
-\subsection{Combining Basic Elements into Complicated Designs}
-% Introduction to the three explored use cases
-\paragraph{Via connection in semiconductor process}
-\paragraph{Microfluidics channel design}
-
-
-\section{Results and Discussion}
 \subsection{Via Connection Experiment}
 \subsubsection{Background}
 In semiconductor processes, vias are essential for creating electrical connections between different layers of a chip. Proper via placement and connection are crucial for ensuring the functionality and reliability of the integrated circuit. This experiment explores the potential of using large language models (LLMs) to generate layout designs for via connections based on natural language descriptions and color-coded sketches.
