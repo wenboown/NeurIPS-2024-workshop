@@ -56,13 +56,13 @@
 
 \begin{abstract}
   % Update abstract to reflect the content of the paper
-  This paper explores the potential of large language models (LLMs) as a "layout design copilot" in various domains such as semiconductor, IC, and microfluidics. We evaluate the capabilities of LLMs in generating basic elements and combining them into complex designs. Our experiments focus on via connections, microfluidics channel design, and fiducial marker generation. We discuss the opportunities and challenges of using LLMs in layout design, highlighting the importance of providing expert knowledge and context to improve their performance.
+  This paper explores the potential of large language models (LLMs) as a ``layout design copilot'' in various domains such as semiconductor, IC, and microfluidics. We evaluate the capabilities of LLMs in generating basic elements and combining them into complex designs. Our experiments focus on via connections, microfluidics channel design, and fiducial marker generation. We discuss the opportunities and challenges of using LLMs in layout design, highlighting the importance of providing expert knowledge and context to improve their performance.
 \end{abstract}
 
 \section{Introduction}
-The semiconductor industry faces significant challenges in automating the layout design for integrated circuits (ICs), microfluidic chips, and other electronic devices. Current graphical user interface (GUI) based design workflows lack adaptability, leading to inefficient, repetitive tasks when creating similar structures with minor variations. This approach violates the "Don't Repeat Yourself" (DRY) principle and reduces productivity.
+The semiconductor industry faces significant challenges in automating the layout design for integrated circuits (ICs), microfluidic chips, and other electronic devices. Current graphical user interface (GUI) based design workflows lack adaptability, leading to inefficient, repetitive tasks when creating similar structures with minor variations. This approach violates the ``Don't Repeat Yourself'' (DRY) principle and reduces productivity.
 
-While traditional layout design software has struggled to address these challenges, Large Language Models (LLMs) offer a promising solution. LLMs' ability to understand natural language instructions and generate code makes them ideal candidates for a "layout design copilot." This new paradigm could allow human designers to focus on high-level tasks requiring creativity and intuition, while the LLM-powered copilot generates or modifies the layout code based on human intent.
+While traditional layout design software has struggled to address these challenges, Large Language Models (LLMs) offer a promising solution. LLMs' ability to understand natural language instructions and generate code makes them ideal candidates for a ``layout design copilot''. This new paradigm could allow human designers to focus on high-level tasks requiring creativity and intuition, while the LLM-powered copilot generates or modifies the layout code based on human intent.
 
 In this paper, we explore the capabilities and limitations of LLMs with 25 common semiconductor layout design tasks. Our main contributions are:
 
@@ -76,7 +76,7 @@ Finally, Section 5 concludes the paper and discusses future research directions.
 
 \section{Baseline LLM Performance in Layout Design}
 
-We evaluated the performance of five large language models (LLMs) - GPT-4o, Claude-3.5-Sonnet, Llama-3.1-70B, Llama-3.1-405B and the new ``reasoning model'', o1-preview - on a set of 25 layout design tasks. Each tasks have been run 5 times with same prompt and temperature = 0.7. We then run the LLM written code to generate a GDSII file and further convert the GDSII to png images for human evaluation. These tasks were categorized into four groups: Basic Shapes 1, Basic Shapes 2, Advanced Shapes, and Complex Structures. Figure \ref{fig:baseline-llm-performance} presents a summary of the LLMs' performance across the task categories. See Appendix for the task prompts and detailed results.
+We evaluated the performance of five large language models (LLMs) - GPT-4o\cite{gpt4o}, Claude-3.5-Sonnet\cite{claude35}, Llama-3.1-70B\cite{llama31}, Llama-3.1-405B\cite{llama31} and the new ``reasoning model'', o1-preview\cite{o1preview} - on a set of 25 layout design tasks. Each tasks have been run 5 times with same prompt and temperature = 0.7. The LLMs are asked to write a python code with gdspy\cite{gdspy} and generate a GDSII file. We then run the LLM written code in a Linux VM and further convert the generated GDSII file to png images for human evaluation. These tasks were categorized into four groups: Basic Shapes 1, Basic Shapes 2, Advanced Shapes, and Complex Structures. Figure \ref{fig:baseline-llm-performance} presents a summary of the LLMs' performance across the task categories. See Appendix for the task prompts and detailed results.
 
 \begin{figure}[h]
   \centering
@@ -86,7 +86,6 @@ We evaluated the performance of five large language models (LLMs) - GPT-4o, Clau
 \end{figure}
 
 The results reveal several common mistakes and limitations of standalone LLMs in handling layout design tasks:
-
 
   1. \textbf{Incorrect scaling}: The default unit in the gdspy library is micrometers. But we requested the basic shapes to be drawn in millimeters, in order to test whether the LLM could correctly figure out this catch and scale the shapes according to the specified units. As can be seen from the dark blue ``Wrong Scale'' part of bar chart, all the LLMs struggled to various degrees: (a) Sometimes the LLMs simply failed to pay attention to the requested unit (millimeters) and did not perform the necessary scaling. (b) In some cases, LLMs did pay attention to the requested unit but made incorrect assumptions about gdspy's default unit. We observed many hallucinations of millimeters and resulting in no scaling. Interestingly, we observed one case where Claude-3.5-Sonnet hallucinated that the default unit was nanometers, leading it to scale the length by 1e6. This resulted in shapes too large to be drawn. (c) From the chart, we can see that Llama-3 models are especially vulnerable to this issue. They sometimes even assumed the user had made a mistake by requesting millimeters, and proceeded to draw in micrometers instead, justifying this choice with comments like "not mm, as the GDSII format is in micrometers". This type of ``arrogant'' behavior and misalignment with human instructions on simple tasks will be very harmful for deploying LLMs as fully automanous AI agents. A recent Nature paper \cite{ZhouNature2024} has also discussed similar observations.
   
