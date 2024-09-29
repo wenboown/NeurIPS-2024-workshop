@@ -95,6 +95,8 @@ The results reveal several common mistakes and limitations of standalone LLMs in
   
   4. \textbf{Inefficient code}: There's one special case that we'd like to point out. In the DLDChip task, which involves creating a dense array of identical shapes, the Llama-3.1-405B model generated a code that created a large number of objects and performed numerous boolean operations, leading to high memory usage and extended execution time. We have to kill the code after about 15 mins of waiting. 
 
+  5. \textbf{Ambiguous instructions}: In some of the results, we observed that the LLMs results mainly fall into two categories. After inspecting the prompts, we found that the instructions can be interpreted in two ways. In this case, we count both type of results as correct. But when implementing copilot, the agent should ask for clarification if the instructions are ambiguous.
+
 Many of these issues can be mitigated by augmenting the LLMs with more advanced setup. For example, using Retrieval-Augmented Generation (RAG) to provide gdspy documentation to the LLMs, we should be able to reduce the errors related to misspelling and hallucinating nonexistent functions. For complex tasks, we can provide example code of simple shapes for In-Context Learning, so the LLMs only need to reason about positioning and scaling, and avoid runtime errors. We will discuss more in Section 3.
 
 \section{Multimodal Inputs and Iterative Reasoning}
@@ -117,6 +119,7 @@ In \textbf{Test 3}, we gave a more detailed description accompanied by the origi
 
 \textbf{Tests 5} and \textbf{6} gradually incorporated more context, such as 3D packaging, Through-Silicon Vias (TSVs), and other domain-specific requirements. However, adding domain knowledge and context did not improve the LLM's performance much, showcasing both its limitations and areas for potential improvement.  Experienced engineers and researchers understand that connecting two vias requires using a metal layer wider than the diameter of the via. Moreover, vias should not be placed at the very ends of metal layers; some leeway is typically be left between layers to accommodate potential misalignment. % this last part is good. very specific.
 
+These experiments demonstrate that LLMs lack the understanding of how to connect domain-specific knowledge to the geometric requirements of layout design. 
 The experiments demonstrate that LLMs currently lack the domain-specific knowledge possessed by experienced engineers, such as the need for wider metal connections between vias and leeway for misalignment. Despite incorporating more context and domain requirements in\textbf{Tests 5} and \textbf{6}, improvements were minimal, highlighting the gap in the LLM's understanding. Future development should focus on embedding domain-specific rules and enhancing consistency and reproducibility.
 
 
