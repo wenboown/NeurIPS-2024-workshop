@@ -60,12 +60,44 @@
 \end{abstract}
 
 \section{Introduction}
-% Brief overview of layout design in various domains
-% Challenges in automating repetitive tasks while maintaining flexibility 
-% Potential of large language models (LLMs) as a "layout design copilot"
-% Thesis statement and paper overview
+The semiconductor industry faces numerous challenges in layout design, a critical step in the design and fabrication of integrated circuits (ICs), microfluidic chips, and other electronic devices. One of the most significant challenges is the repetitive nature of drawing similar shapes with minor variations, such as serpentine structures in microfluidic chips with different widths, lengths, number of turns, and turning radii. This repetitive task often violates the "Don't Repeat Yourself" (DRY) principle of software development, leading to inefficiencies and potential inconsistencies in the design process.
 
-\section{Methodology}
+Traditional layout design software, which primarily relies on graphical user interfaces (GUIs) rather than scripting-based languages, has struggled to address this issue effectively. However, the advent of Large Language Models (LLMs) presents a new opportunity to revolutionize the layout design process. LLMs have demonstrated remarkable capabilities in understanding natural language instructions, as well as in tasks such as code generation and understanding. By leveraging these capabilities, we can envision a "layout design copilot" that can significantly streamline the design process and improve efficiency.
+
+In this paper, we propose a Neuro-inspired LLM Reasoning Network architecture specifically tailored for adaptive and efficient layout design. Our proposed system allows users to provide natural language instructions to the copilot, describing the desired layout structures and their variations. Additionally, the system can support multimodal inputs, such as sketches, to help communicate the design intent more effectively. The LLM-based copilot then generates code snippets in programming languages like Python, utilizing standard libraries such as gdspy or OASISpy to create GDSII or OASIS files. Furthermore, the copilot can interact with existing layout design software, such as KLayout, through APIs or the software's built-in Python environment.
+
+The main contributions of our work are as follows:
+
+1. We introduce a novel Neuro-inspired LLM Reasoning Network architecture that leverages multiple LLMs to generate initial layout design attempts, assess their quality, and reach a consensus on the most promising solutions. This architecture enables more robust and accurate layout generation while mitigating the issue of hallucinations.
+
+2. We demonstrate the effectiveness of our proposed system in the 25 common semiconductor layout design tasks, showcasing its ability to generate accurate and consistent layouts based on natural language instructions and multimodal inputs.
+
+3. We conduct a comprehensive evaluation of our system, comparing its performance against the baseline performance of single-model zero-shot prompting approaches of 5 state-of-the-art LLMs. Our results show significant improvements in terms of zero-shot accuracy and the ability to avoid hallucination-induced mistakes.
+
+The remainder of this paper is structured as follows: Section 2 describes the Neuro-inspired LLM Reasoning Network architecture in detail, highlighting its key components and their interactions. Section 3 presents our experimental setup and the datasets used for evaluation. Section 4 discusses the results of our experiments, comparing the performance of our proposed system against baseline models and state-of-the-art approaches. Section 5 explores potential future directions and applications of our work. Finally, Section 6 concludes the paper, summarizing our findings and contributions.
+
+\section{Neuro-inspired LLM Reasoning Network Architecture}
+
+In this section, we present a novel Neuro-inspired LLM Reasoning Network Architecture designed to enhance the reasoning capabilities of large language models (LLMs) and mitigate the issue of hallucinations in generated outputs. This architecture is particularly well-suited for complex domains such as semiconductor layout design, where the ability to generate accurate and consistent results is critical.
+
+The proposed architecture is inspired by the Brain-like AGI and the Free Energy Principle (FEP) theory. It consists of three main components: Thought Generator Pool, Thought Assessors, and a Steering Subsystem. The Thought Generator Pool is a multi-LLM network that generates initial attempts at a given task by exploring different approaches and perspectives. This multi-LLM approach allows for a more comprehensive exploration of the problem space compared to traditional single-model approaches. It is effectively a Tree-of-Thoughts combined with parallel searching. Because different LLMs have distinct pre-train data and architecture and embedding spaces, this approach can effectively sample diverse solutions from human knowledge space.
+
+The Thought Assessors, also implemented as LLMs, evaluate the outputs generated by the Thought Generator Pool. They analyze the initial attempts, identify consistencies and discrepancies, and reach a consensus on the most promising solutions. By examining the differences between the initial outputs, the Thought Assessors can identify potential hallucinations and mistakes, enabling the system to produce more robust and accurate results.
+
+In the current implementation, a human serves as the Steering Subsystem, coordinating interactions and guiding the overall reasoning process. Additionally, the human performs the active inference function within the Free Energy Principle (FEP) framework. In future work, we aim to develop an automated Steering Subsystem that can distill the system's successes and failures into its knowledge base (a Retrieval-Augmented Generation (RAG) database) to support continual learning.
+
+One of the key advantages of this architecture is its ability to facilitate personal and domain adaptation. By leveraging RAG and continual learning, the system can effectively adapt to specific users' preferences and domain-specific knowledge. This adaptability is particularly valuable in the context of semiconductor layout design, where the ability to tailor the system's outputs to individual designers' needs and domain-specific constraints is essential.
+
+figure 1
+
+Figure 1 illustrates the high-level architecture of the Neuro-inspired LLM Reasoning Network. The Thought Generator, consisting of multiple LLMs, generates initial attempts at the given task. The Thought Assessors evaluate these attempts, identify discrepancies, and reach a consensus on the most promising solutions. The Steering Subsystem coordinates the interactions between the Thought Generator and Thought Assessors, incorporating techniques like RAG and continual learning to enhance the system's adaptability.
+
+figure 2
+
+Figure 2 provides a more detailed view of the interaction between the Thought Generator and Thought Assessors. The Thought Generator produces multiple initial attempts, which are then evaluated by the Thought Assessors. The assessors identify consistencies and discrepancies among the attempts, enabling the detection of potential hallucinations and mistakes. This process allows the system to generate more robust and accurate outputs.
+
+The proposed Neuro-inspired LLM Reasoning Network Architecture offers a significant improvement over traditional single-model approaches in terms of zero-shot accuracy and the ability to avoid hallucination-induced mistakes. By leveraging the power of multiple LLMs and incorporating techniques like RAG and continual learning, this architecture enables more effective reasoning and adaptability in complex domains such as semiconductor layout design.
+
 \subsection{Basic Element Generation}
 
 We gave LLMs a list of shapes, and asked them to generate code to draw these shapes.
