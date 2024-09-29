@@ -80,7 +80,7 @@ Finally, Section 5 concludes the paper and discusses future research directions.
 
 \section{Baseline LLM Performance in Layout Design}
 
-We evaluated the performance of five large language models (LLMs) - GPT-4o, Claude-3.5-Sonnet, Llama-3.1-70B, Llama-3.1-405B and the new ``reasoning model'', o1-preview - on a set of 25 layout design tasks. These tasks were categorized into four groups: Basic Shapes 1, Basic Shapes 2, Advanced Shapes, and Complex Structures. Figure \ref{fig:baseline-llm-performance} presents a summary of the LLMs' performance across the task categories. See Appendix for the detailed results.
+We evaluated the performance of five large language models (LLMs) - GPT-4o, Claude-3.5-Sonnet, Llama-3.1-70B, Llama-3.1-405B and the new ``reasoning model'', o1-preview - on a set of 25 layout design tasks. Each tasks have been run 5 times with same prompt and temperature = 0.7. We then run the LLM written code to generate a GDSII file and further convert the GDSII to png images for human evaluation. These tasks were categorized into four groups: Basic Shapes 1, Basic Shapes 2, Advanced Shapes, and Complex Structures. Figure \ref{fig:baseline-llm-performance} presents a summary of the LLMs' performance across the task categories. See Appendix for the task prompts and detailed results.
 
 \begin{figure}[h]
   \centering
@@ -92,13 +92,13 @@ We evaluated the performance of five large language models (LLMs) - GPT-4o, Clau
 The results reveal several common mistakes and limitations of standalone LLMs in handling layout design tasks:
 
 \begin{enumerate}
-  \item \textbf{Incorrect scaling}: Many LLMs struggled with correctly scaling the shapes according to the specified units. The default unit in the gdspy library is micrometers, but most of our basic shape requests were in millimeters. LLMs needed to explicitly scale the lengths by 1000 to obtain the correct output. Some LLMs made incorrect assumptions about the default unit, leading to scaling errors.
+  \item \textbf{Incorrect scaling}: The default unit in the gdspy library is micrometers. But we requested the basic shapes to be drawn in millimeters, in order to test whether the LLM could correctly figure out this catch and scale the shapes according to the specified units. As can be seen from the dark blue ``Wrong Scale'' part of bar chart, all the LLMs struggled to various degrees: (a) Sometimes the LLMs simply failed to pay attention to the requested unit (millimeters) and did not perform the necessary scaling. (b) In some cases, LLMs did pay attention to the requested unit but made incorrect assumptions about gdspy's default unit. We observed many hallucinations of millimeters and resulting in no scaling. Interestingly, we observed one case where Claude-3.5-Sonnet hallucinated that the default unit was nanometers, leading it to scale the length by 1e6. This resulted in shapes too large to be drawn. (c) From the chart, we can see that Llama-3 models are especially vulnerable to this issue. They sometimes even assumed the user had made a mistake by requesting millimeters, and proceeded to draw in micrometers instead, justifying this choice with comments like "not mm, as the GDSII format is in micrometers". This type of ``arrogant'' behavior and misalignment with human instructions on simple tasks will be very harmful for deploying LLMs as fully automanous AI agents. A recent Nature paper \cite{ZhouNature2024} has also discussed similar observations.
   
-  \item \textbf{Partial correctness}: In more complex tasks, LLMs often generated partially correct layouts with mistakes in the relative positioning of shapes. For example, in the ViaConnection task, which involved specific location requirements, only o1-preview achieved a fully correct result. The other LLMs produced partially correct outputs with counts: GPT-4o (2), Claude-3.5-Sonnet (2), Llama-3.1-70B (1), and Llama-3.1-405B (3).
+  \item \textbf{Partial correctness}: In more complex tasks, LLMs often generated partially correct layouts with mistakes in the relative positioning of simple shapes. For example, in the ViaConnection task, which involved specific relative location requirements like ``Ensure the metal connection fully covers the vias and leaves a margin of 10 units between the edge of the metal and the pads. Leave a space of 50 units between the vias and the edges of the metal connection.'', only o1-preview achieved one fully correct result. The other LLMs all produced partially correct outputs as shown in the yellow ``Partially Correct'' part of the bar chart.
   
-  \item \textbf{Runtime errors}: Several LLMs generated code that threw exceptions and failed to run. A common error was "AttributeError: module 'gdspy' has no attribute 'LayoutViewer'", which occurred because the LLMs were unaware of the runtime environment. The gdspy version (1.6.3) installed in our Linux VM did not support GUI output, causing this error. Other common errors included AttributeErrors, TypeErrors, and SyntaxErrors, as detailed in the error report (see Appendix).
+  \item \textbf{Runtime errors}: Approximately one third of the generated code from the evaluated LLMs resulted in exceptions and failed to execute. The most frequent error, \textit{AttributeError: module 'gdspy' has no attribute 'LayoutViewer'}, occurred 26 times (59.09\%) with GPT-4o and 33 times (61.11\%) with Claude-3.5-Sonnet. In contrast, this error was reported only once each for Llama-3.1-70B and o1-preview, and not at all for Llama-3.1-405B, indicating that GPT-4o and Claude-3.5-Sonnet are trying to be more ``helpful'' by providing GUI output, which is not available in the runtime environment. This is not entirely LLM's fault, but due to missing information in the prompt. The second most common errors were due to hallucinations of nonexistent `gdspy` functions or methods, including various `AttributeErrors` (e.g., `'CrossSection'`, `'Circular'`, `'Ellipse'`) and `TypeErrors`. This also includes spelling error, for example, miss spelling \textit{gdspy.Text} as \textit{gdspy.text}. Additionally, other frequent issues involved typical programming logic mistakes such as missing module imports or incorrect function parameters. For more details, see the error report in (Appendix).
   
-  \item \textbf{Inefficient code}: In some cases, the generated code was inefficient or contained potential issues that caused the program to run very slowly or appear to be stuck. For example, in the DLDChip task, the Llama-3.1-405B model generated code that created a large number of objects and performed numerous boolean operations, leading to high memory usage and extended execution time.
+  \item \textbf{Inefficient code}: There's one special case that we'd like to point out. In the DLDChip task, which involves creating a dense array of identical shapes, the Llama-3.1-405B model generated a code that created a large number of objects and performed numerous boolean operations, leading to high memory usage and extended execution time. We have to kill the code after about 15 mins of waiting. 
 \end{enumerate}
 
 These findings highlight the limitations of standalone LLMs in handling complex layout design tasks. While they perform relatively well on basic shapes, their performance deteriorates as the task complexity increases. The common mistakes and inefficiencies underscore the need for a more advanced approach to tackle these challenges effectively.
@@ -114,7 +114,7 @@ The sketch-to-design approach using LLMs involves providing a natural language d
 We conducted a series of tests to evaluate the LLM's performance in generating via connection layouts. Figure \ref{fig:via_experiment} presents the sketch input and the corresponding outputs generated by the LLM for each test case.
 \begin{figure}[!h]
 \centering
-\includegraphics[width=1\linewidth]{Styles/Figure1_v3.png}
+\includegraphics[width=1\linewidth]{Figure1_v3.png}
 \caption{Sketch input and LLM-generated outputs for the via connection experiment. The sketch depicts a desired layout with two vias connected by a metal layer and circular pads on top. The outputs show the progression of the LLM's understanding and refinement of the layout based on iterative feedback and context provided by the user.}
 \label{fig:via_experiment}
 \end{figure}
@@ -170,6 +170,6 @@ The proposed Neuro-inspired LLM Reasoning Network Architecture offers a signific
 agent \cite{Ho2024-cd}
 other domains, like mechanics, architecture (3d virtual space \cite{Sasazawa2024-wf})
 
-\printbibliography %Prints bibliography
+% \printbibliography %Prints bibliography
 
 \end{document}
