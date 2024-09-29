@@ -60,11 +60,11 @@
 \end{abstract}
 
 \section{Introduction}
-The semiconductor industry faces numerous challenges in layout design, a critical step in the design and fabrication of integrated circuits (ICs), microfluidic chips, and other electronic devices. One of the most significant challenges is the repetitive nature of drawing similar shapes with minor variations, such as serpentine structures in microfluidic chips with different widths, lengths, number of turns, and turning radii. This repetitive task often violates the "Don't Repeat Yourself" (DRY) principle of software development, leading to inefficiencies and potential inconsistencies in the design process.
+The semiconductor industry faces numerous challenges in layout design, a critical step in the design and fabrication of integrated circuits (ICs), microfluidic chips, and other electronic devices. One of the most significant challenges is the repetitive nature of drawing similar shapes with minor variations, such as serpentine structures in microfluidic chips with different widths, lengths, number of turns, and tuning radii. \cite{Greengard2024-hx} This repetitive task often violates the "Don't Repeat Yourself" (DRY) principle of software development, leading to inefficiencies and potential inconsistencies in the design process.
 
 Traditional layout design software, which primarily relies on graphical user interfaces (GUIs) rather than scripting-based languages, has struggled to address this issue effectively. However, the advent of Large Language Models (LLMs) presents a new opportunity to revolutionize the layout design process. LLMs have demonstrated remarkable capabilities in understanding natural language instructions, as well as in tasks such as code generation and understanding. By leveraging these capabilities, we can envision a "layout design copilot" that can significantly streamline the design process and improve efficiency.
 
-In this paper, we propose a Neuro-inspired LLM Reasoning Network architecture specifically tailored for adaptive and efficient layout design. Our proposed system allows users to provide natural language instructions to the copilot, describing the desired layout structures and their variations. Additionally, the system can support multimodal inputs, such as sketches, to help communicate the design intent more effectively. The LLM-based copilot then generates code snippets in programming languages like Python, utilizing standard libraries such as gdspy or OASISpy to create GDSII or OASIS files. Furthermore, the copilot can interact with existing layout design software, such as KLayout, through APIs or the software's built-in Python environment.
+In this paper, we propose a Neuro-inspired LLM Reasoning Network architecture specifically tailored for adaptive and efficient layout design. Our proposed system allows users to provide natural language instructions to the copilot, describing the desired layout structures and their variations. Additionally, the system can support multimodal inputs, such as sketches, to help communicate the design intent more effectively. The LLM-based copilot then generates code snippets in programming languages like Python, utilizing standard libraries such as gdspy \cite{gdspy} or OASISpy \cite{oasispy} to create GDSII or OASIS files. Furthermore, the copilot can interact with existing layout design software, such as KLayout \cite{klayout}, through APIs or the software's built-in Python environment.
 
 The main contributions of our work are as follows:
 
@@ -100,7 +100,7 @@ The proposed Neuro-inspired LLM Reasoning Network Architecture offers a signific
 
 \section{Baseline LLM Performance in Layout Design}
 
-We evaluated the performance of five large language models (LLMs) - GPT-4o, o1-preview, Claude-3.5-Sonnet, Llama-3.1-70B, and Llama-3.1-405B - on a set of 25 layout design tasks. These tasks were categorized into four groups: Basic Shapes 1, Basic Shapes 2, Advanced Shapes, and Complex Structures. Figure \ref{fig:baseline-llm-performance} presents a summary of the LLMs' performance across the task categories.
+We evaluated the performance of five large language models (LLMs) - GPT-4o \cite{GPT-4o}, o1-preview \cite{o1-preview}, Claude-3.5-Sonnet \cite{Claude-3.5-Sonnet}, Llama-3.1-70B \cite{Llama-3.1-70B}, and Llama-3.1-405B \cite{Llama-3.1-405B} - on a set of 25 layout design tasks. These tasks were categorized into four groups: Basic Shapes 1, Basic Shapes 2, Advanced Shapes, and Complex Structures. Figure \ref{fig:baseline-llm-performance} presents a summary of the LLMs' performance across the task categories.
 
 \begin{figure}[h]
   \centering
@@ -151,7 +151,7 @@ In \textbf{Test 3}, we gave a more detailed description accompanied by the origi
 
 \textbf{Tests 5} and \textbf{6} gradually incorporated more context, such as 3D packaging, Through-Silicon Vias (TSVs), and other domain-specific requirements. However, adding domain knowledge and context did not improve the LLM's performance much, showcasing both its limitations and areas for potential improvement. Experienced engineers and researchers understand that connecting two vias requires using a metal layer wider than the diameter of the via. Moreover, vias should not be placed at the very ends of metal layers; some leeway is typically be left between layers to accommodate potential misalignment.
 
-The experiments demonstrate that LLMs currently lack the domain-specific knowledge possessed by experienced engineers, such as the need for wider metal connections between vias and leeway for misalignment. Despite incorporating more context and domain requirements in\textbf{Tests 5} and \textbf{6}, improvements were minimal, highlighting the gap in the LLM's understanding. While LLMs show potential in layout generation, they are not yet ready to replace human expertise, particularly in tasks demanding advanced semiconductor and microfluidics design knowledge. Future development should focus on embedding domain-specific rules and enhancing consistency and reproducibility.
+The experiments demonstrate that LLMs currently lack the domain-specific knowledge possessed by experienced engineers, such as the need for wider metal connections between vias and leeway for misalignment. Despite incorporating more context and domain requirements in\textbf{Tests 5} and \textbf{6}, improvements were minimal, highlighting the gap in the LLM's understanding. Future development should focus on embedding domain-specific rules and enhancing consistency and reproducibility.
 
 
 
@@ -163,15 +163,7 @@ The via connection experiment revealed several key findings:
 \item LLMs have limitations in understanding domain-specific requirements and constraints without explicit guidance.
 \end{itemize}
 \subsubsection{Potential Improvements and Future Work}
-To enhance the sketch-to-design approach for via connections, we propose incorporating domain-specific knowledge and design rules into the LLM prompts. This can be achieved by providing a comprehensive set of guidelines and constraints as part of the input description. Additionally, future experiments should focus on validating the effectiveness of the improved approach and exploring its applicability to more complex via connection scenarios.
-
-\subsection{Microfluidics Design}
-% LLMs can guide researchers in estimating channel size based on fluid properties and dynamics
-% Limitations: LLMs struggle with arithmetic calculations and may lack domain expertise
-
-\subsection{Fiducial Marker Generation}
-% LLMs perform well in generating fiducial markers on grids or arrays
-% Advantages over commercial software: flexibility and potential other benefits
+To enhance the sketch-to-design approach for via connections, we propose incorporating domain-specific knowledge and design rules into the LLM prompts. This can be achieved by providing a comprehensive set of guidelines and constraints as part of the input description. Additionally, future experiments should focus on validating the effectiveness of the improved approach and exploring its applicability to more complex scenarios.
 
 \subsection{General Discussion}
 % The importance of spatial thinking, imagination, and understanding of physics for LLMs
@@ -184,7 +176,8 @@ To enhance the sketch-to-design approach for via connections, we propose incorpo
 %   - Dealing with more complicated designs
 %   - Creating a benchmark to test LLM capabilities in layout design tasks
 % Final thoughts on the role of LLMs as a "layout design copilot"
-other domains, like mechanics, architecture
+agent \cite{Ho2024-cd}
+other domains, like mechanics, architecture (3d virtual space \cite{Sasazawa2024-wf})
 
 \printbibliography %Prints bibliography
 

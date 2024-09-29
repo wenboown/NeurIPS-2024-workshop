@@ -1,16 +1,151 @@
 
-@ARTICLE{Lu2024-im,
-  title     = "Sheathless and high-throughput separation of multi-target
-               particles combining inertia and deterministic lateral
-               displacement ({DLD}) in a microchannel",
-  author    = "Lu, Yuwen and Ying, Jiaqian and Mu, Shuoshuo and Tan, Wei and
-               Zhu, Guorui",
-  journal   = "Sep. Purif. Technol.",
-  publisher = "Elsevier BV",
-  volume    =  345,
-  number    =  127369,
-  pages     =  127369,
-  month     =  oct,
+@ARTICLE{Sasazawa2024-wf,
+  title         = "Layout generation agents with large language models",
+  author        = "Sasazawa, Yuichi and Sogawa, Yasuhiro",
+  journal       = "arXiv [cs.HC]",
+  abstract      = "In recent years, there has been an increasing demand for
+                   customizable 3D virtual spaces. Due to the significant human
+                   effort required to create these virtual spaces, there is a
+                   need for efficiency in virtual space creation. While existing
+                   studies have proposed methods for automatically generating
+                   layouts such as floor plans and furniture arrangements, these
+                   methods only generate text indicating the layout structure
+                   based on user instructions, without utilizing the information
+                   obtained during the generation process. In this study, we
+                   propose an agent-driven layout generation system using the
+                   GPT-4V multimodal large language model and validate its
+                   effectiveness. Specifically, the language model manipulates
+                   agents to sequentially place objects in the virtual space,
+                   thus generating layouts that reflect user instructions.
+                   Experimental results confirm that our proposed method can
+                   generate virtual spaces reflecting user instructions with a
+                   high success rate. Additionally, we successfully identified
+                   elements contributing to the improvement in behavior
+                   generation performance through ablation study.",
+  month         =  may,
+  year          =  2024,
+  archivePrefix = "arXiv",
+  primaryClass  = "cs.HC"
+}
+
+
+
+@ARTICLE{Ho2024-cd,
+  title         = "Large Language Model ({LLM}) for standard cell layout design
+                   optimization",
+  author        = "Ho, Chia-Tung and Ren, Haoxing",
+  journal       = "arXiv [cs.AR]",
+  abstract      = "Standard cells are essential components of modern digital
+                   circuit designs. With process technologies advancing toward
+                   2nm, more routability issues have arisen due to the
+                   decreasing number of routing tracks, increasing number and
+                   complexity of design rules, and strict patterning rules. The
+                   state-of-the-art standard cell design automation framework is
+                   able to automatically design standard cell layouts in
+                   advanced nodes, but it is still struggling to generate highly
+                   competitive Performance-Power-Area (PPA) and routable cell
+                   layouts for complex sequential cell designs. Consequently, a
+                   novel and efficient methodology incorporating the expertise
+                   of experienced human designers to incrementally optimize the
+                   PPA of cell layouts is highly necessary and essential.
+                   High-quality device clustering, with consideration of netlist
+                   topology, diffusion sharing/break and routability in the
+                   layouts, can reduce complexity and assist in finding highly
+                   competitive PPA, and routable layouts faster. In this paper,
+                   we leverage the natural language and reasoning ability of
+                   Large Language Model (LLM) to generate high-quality cluster
+                   constraints incrementally to optimize the cell layout PPA and
+                   debug the routability with ReAct prompting. On a benchmark of
+                   sequential standard cells in 2nm, we demonstrate that the
+                   proposed method not only achieves up to 19.4\% smaller cell
+                   area, but also generates 23.5\% more LVS/DRC clean cell
+                   layouts than previous work. In summary, the proposed method
+                   not only successfully reduces cell area by 4.65\% on average,
+                   but also is able to fix routability in the cell layout
+                   designs.",
+  month         =  may,
+  year          =  2024,
+  archivePrefix = "arXiv",
+  primaryClass  = "cs.AR"
+}
+
+@ARTICLE{Greengard2024-hx,
+  title     = "{AI} reinvents chip design",
+  author    = "Greengard, Samuel",
+  journal   = "Commun. ACM",
+  publisher = "Association for Computing Machinery (ACM)",
+  volume    =  67,
+  number    =  9,
+  pages     = "16--18",
+  abstract  = "Chipmakers are turning to artificial intelligence to improve
+               conceptional design, transistor models, simulations and analysis,
+               verification and testing, and more.",
+  month     =  sep,
   year      =  2024,
   language  = "en"
+}
+
+@software{gdspy,
+  author       = {Lucas Heitzmann Gabrielli},
+  title        = {gdspy: Python module for creating GDSII stream files},
+  year         = {2024},
+  publisher    = {GitHub},
+  version      = {1.6.13},
+  url          = {https://github.com/heitzmann/gdspy}
+}
+
+@software{oasispy,
+  author       = {Gu, Dongyang},
+  title        = {oasispy: Python module for creating OASIS stream files},
+  year         = {2024},
+  publisher    = {GitHub},
+  version      = {1.0.0},
+  url          = {https://github.com/dongyang-gu/oasispy}
+}
+
+@software{klayout,
+  title = {KLayout - High Performance Layout Viewer And Editor},
+  year = {2024},
+  url = {http://www.klayout.de/},
+  note = {RRID:SCR_014644}
+}
+
+@misc{GPT-4o,
+  author = {{OpenAI}},
+  title = {{GPT-4o}},
+  year = {2024},
+  note = {Accessed on September 29, 2024},
+  howpublished = {\url{https://openai.com/index/hello-gpt-4o/}}
+}
+
+@misc{o1-preview,
+  author = {{OpenAI}},
+  title = {{o1-preview}},
+  year = {2024},
+  note = {Accessed on September 29, 2024},
+  howpublished = {\url{https://openai.com/}}
+}
+
+@misc{Claude-3.5-Sonnet,
+  author = {{Anthropic}},
+  title = {{Claude-3.5-Sonnet}},
+  year = {2024},
+  note = {Accessed on September 29, 2024},
+  howpublished = {\url{https://www.anthropic.com}}
+}
+
+@misc{Llama-3.1-70B,
+  author = {{Meta AI}},
+  title = {{Llama-3.1-70B}},
+  year = {2024},
+  note = {Accessed on September 29, 2024},
+  howpublished = {\url{https://ai.meta.com/llama/}}
+}
+
+@misc{Llama-3.1-405B,
+  author = {{Meta AI}},
+  title = {{Llama-3.1-405B}},
+  year = {2024},
+  note = {Accessed on September 29, 2024},
+  howpublished = {\url{https://ai.meta.com/llama/}}
 }
