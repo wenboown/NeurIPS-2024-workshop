@@ -64,10 +64,10 @@ The semiconductor industry faces significant challenges in automating the layout
 
 While traditional layout design software has struggled to address these challenges, Large Language Models (LLMs) offer a promising solution. LLMs' ability to understand natural language instructions and generate code makes them ideal candidates for a ``layout design copilot''. This new paradigm could allow human designers to focus on high-level tasks requiring creativity and intuition, while the LLM-powered copilot generates or modifies the layout code based on human intent.
 
-In this paper, we explore the capabilities and limitations of LLMs with 25 common semiconductor layout design tasks. Our main contributions are: 
-(1) Evaluating the baseline performance of five state-of-the-art LLMs on layout design tasks with zero-shot prompting; Identifying common errors and proposing how to use Retrieval-Augmented Generation (RAG) and In-Context Learning to address them (Section 2). 
-(2) Documenting an iterative design process of multimodal inputs with GPT-4o for a complex task (ViaConnection), illustrating the limitations of current LLMs in spatial reasoning (Section 3). 
-(3) Introducing a novel Neuro-inspired LLM Reasoning Network architecture that leverages multiple LLMs to improve reasoning capabilities and mitigate hallucinations in layout design tasks. Presenting preliminary results. (Section 4).
+In this paper, we explore the capabilities and limitations of LLMs with a properitary dataset of 25 common semiconductor layout design tasks. Our main contributions are: 
+(Section 2) Evaluating the baseline performance of five state-of-the-art LLMs on layout design tasks with zero-shot prompting; Identifying common errors and proposing how to use Retrieval-Augmented Generation (RAG) and In-Context Learning to address them. 
+(Section 3) Documenting an iterative design process of multimodal inputs with GPT-4o for a complex task (ViaConnection), illustrating the limitations of current LLMs in spatial reasoning. 
+(Section 4) Introducing a novel Neuro-inspired LLM Reasoning Network architecture that leverages multiple LLMs to improve reasoning capabilities and mitigate hallucinations in layout design tasks. Presenting preliminary results. 
 
 Finally, Section 5 concludes the paper and discusses future research directions.
 
@@ -86,7 +86,7 @@ The results reveal several common mistakes and limitations of standalone LLMs in
 
   1. \textbf{Incorrect scaling}: The default unit in the gdspy library is micrometers. But we requested the basic shapes to be drawn in millimeters, in order to test whether the LLM could correctly figure out this catch and scale the shapes according to the specified units. As can be seen from the dark blue ``Wrong Scale'' part of bar chart, all the LLMs struggled to various degrees: (a) Sometimes the LLMs simply failed to pay attention to the requested unit (millimeters) and did not perform the necessary scaling. (b) In some cases, LLMs did pay attention to the requested unit but made incorrect assumptions about gdspy's default unit. We observed many hallucinations of millimeters (Llama) and a few cases of nanometers (Claude) or meters (GPT-4o). Especially when multiple units are mentioned in the prompt, LLMs are more likely to hallucinate. (c) From the chart, we can see that Llama-3 models are especially vulnerable to this issue. They sometimes even assumed the user had made a mistake by requesting millimeters, and proceeded to draw in micrometers instead, justifying this choice with comments like "not mm, as the GDSII format is in micrometers". This type of ``arrogant'' behavior and misalignment with human instructions on simple tasks will be very harmful for deploying LLMs as fully automanous AI agents. A recent Nature paper \cite{ZhouNature2024} has also discussed similar observations.
   
-  2. \textbf{Partial correctness}: In more complex tasks, LLMs often generated partially correct result with right shapes but wrong relative positions. This is shown in the light green ``Partially Correct'' part of the bar chart.
+  2. \textbf{Partial correctness}: In more complex tasks, LLMs sometimes generated partially correct result with right shapes but wrong relative positions. This is shown in the light green ``Partially Correct'' part of the bar chart.
   
   3. \textbf{Wrong shapes}: Incorrect shapes often result from LLMs making basic arithmetic errors. For instance, in the ``Hexagon'' task, Llama-3.1-405B once used an internal angle of 120 degrees, producing a triangle instead of a hexagon. However, in other runs, it correctly calculated the angle based on the number of edges. Many of these errors can be mitigated through Chain-of-Thought (CoT) prompting, which encourages the model to do calculations step-by-step.
 
@@ -96,7 +96,7 @@ The results reveal several common mistakes and limitations of standalone LLMs in
 
   6. \textbf{Ambiguous instructions}: In some of the results, we observed that the LLMs results mainly fall into two categories. After inspecting the prompts, we found that the instructions can be interpreted in two ways. In this case, we count both type of results as correct. But when implementing copilot, the agent should ask for clarification if the instructions are ambiguous.
 
-Many of these issues can be mitigated by augmenting the LLMs with more advanced setup. For example, using Retrieval-Augmented Generation (RAG) to provide gdspy documentation to the LLMs, we should be able to reduce the errors related to misspelling and hallucinating nonexistent functions. For complex tasks, we can provide example code of simple shapes for In-Context Learning, so the LLMs only need to reason about positioning and scaling, and avoid runtime errors. We will discuss more in Section 3.
+Many of these issues can be mitigated by augmenting the LLMs with more advanced setup. Specifically, using Retrieval-Augmented Generation (RAG) to provide gdspy documentation to the LLMs, we should be able to reduce the errors related to misspelling and hallucinating nonexistent functions. For complex tasks, we can provide example code of simple shapes for In-Context Learning, so the LLMs only need to reason about positioning and scaling, and avoid runtime errors. We will discuss more in Section 3.
 
 \section{Multimodal Inputs and Spatial Reasoning}
 Layout design in semiconductor processes requires not only generating correct basic geometric shapes but also spatial reasoning to create proper ``layouts'' that meet specific requirements. Via connections, which create electrical pathways between different chip layers, exemplify this challenge. While seemingly simple—typically consisting of circular vias and rectangular metal connections—they demand precise positioning and sizing to ensure no short or open circuits and other functionality issues.
@@ -107,7 +107,7 @@ We conducted a series of tests by providing a sketch(image) together with text p
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=1\linewidth]{Styles/Figure1_v5.png}
+\includegraphics[width=1\linewidth]{Figure1_v5.png}
 \caption{Sketch input and LLM-generated outputs for the via connection experiment. The sketch depicts a desired layout with two vias connected by a metal layer and circular pads on top. The outputs show the progression of the LLM's understanding and refinement of the layout based on iterative feedback and context provided by the user.}
 \label{fig:via_experiment}
 \end{figure}
