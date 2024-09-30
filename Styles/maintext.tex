@@ -73,7 +73,7 @@ Finally, Section 5 concludes the paper and discusses future research directions.
 
 \section{Baseline LLM Performance in Layout Design}
 
-We evaluated the performance of five large language models (LLMs) - GPT-4o\cite{gpt4o}, Claude-3.5-Sonnet\cite{claude35}, Llama-3.1-70B\cite{llama31}, Llama-3.1-405B\cite{llama31} and the new ``reasoning model'', o1-preview\cite{o1preview} - on a set of 25 layout design tasks. Each tasks have been run 5 times with same prompt and temperature = 0.7. The LLMs are asked to write a python code with gdspy\cite{gdspy} and generate a GDSII file. We then run the LLM written code in a Linux VM and further convert the generated GDSII file to png images for human evaluation. These tasks were categorized into four groups: Basic Shapes 1, Basic Shapes 2, Advanced Shapes, and Complex Structures. Figure \ref{fig:baseline-llm-performance} presents a summary of the LLMs' performance across the task categories. See Appendix for the task prompts and detailed results.
+We evaluated the performance of five large language models (LLMs) - GPT-4o\cite{GPT-4o}, Claude-3.5-Sonnet\cite{Claude-3.5-Sonnet}, Llama-3.1-70B\cite{Llama-3.1-70B}, Llama-3.1-405B\cite{Llama-3.1-405B} and the new ``reasoning model'', o1-preview\cite{o1-preview} - on a set of 25 layout design tasks. Each tasks have been run 5 times with same prompt and temperature = 0.7. The LLMs are asked to write a python code with gdspy\cite{gdspy} and generate a GDSII file. We then run the LLM written code in a Linux VM and further convert the generated GDSII file to png images for human evaluation. These tasks were categorized into four groups: Basic Shapes 1, Basic Shapes 2, Advanced Shapes, and Complex Structures. Figure \ref{fig:baseline-llm-performance} presents a summary of the LLMs' performance across the task categories. See Appendix for the task prompts and detailed results.
 
 \begin{figure}[h]
   \centering
@@ -105,7 +105,7 @@ We conducted a series of tests by providing a sketch(image) together with text p
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=1\linewidth]{Figure1_v3.png}
+\includegraphics[width=1\linewidth]{Figure1_v4.png}
 \caption{Sketch input and LLM-generated outputs for the via connection experiment. The sketch depicts a desired layout with two vias connected by a metal layer and circular pads on top. The outputs show the progression of the LLM's understanding and refinement of the layout based on iterative feedback and context provided by the user.}
 \label{fig:via_experiment}
 \end{figure}
@@ -151,5 +151,15 @@ agent \cite{Ho2024-cd}
 other domains, like mechanics, architecture (3d virtual space \cite{Sasazawa2024-wf})
 
 \printbibliography %Prints bibliography
+
+\newpage
+\appendix
+
+\section{Appendix / supplemental material}
+\textbf{Prompt for Test 1:}
+"I have a sketch idea that i want to draw in GDSII, generate the python code for this design. each color represents an individual layer. We want to use a metal to connect two vias and put a pad on top of each via"; with graphical input of the sketch:
+\includegraphics[width=0.5\linewidth]{sketch.png}
+
+
 
 \end{document}
