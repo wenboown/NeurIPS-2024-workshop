@@ -78,17 +78,31 @@ We evaluated the performance of five large language models (LLMs) - GPT-4o\cite{
 
 The results reveal several common mistakes and limitations of standalone LLMs in handling layout design tasks:
 
-  1. \textbf{Incorrect scaling}: The default unit in the gdspy library is micrometers. But we requested the basic shapes to be drawn in millimeters, in order to test whether the LLM could correctly figure out this catch and scale the shapes according to the specified units. As can be seen from the dark blue ``Wrong Scale'' part of bar chart, all the LLMs struggled to various degrees: (a) Sometimes the LLMs simply failed to pay attention to the requested unit (millimeters) and did not perform the necessary scaling. (b) In some cases, LLMs did pay attention to the requested unit but made incorrect assumptions about gdspy's default unit. We observed many hallucinations of millimeters (Llama) and a few cases of nanometers (Claude) or meters (GPT-4o). Especially when multiple units are mentioned in the prompt, LLMs are more likely to hallucinate. (c) From the chart, we can see that Llama-3 models are especially vulnerable to this issue. They sometimes even assumed the user had made a mistake by requesting millimeters, and proceeded to draw in micrometers instead, justifying this choice with comments like "not mm, as the GDSII format is in micrometers". This type of ``arrogant'' behavior and misalignment with human instructions on simple tasks will be very harmful for deploying LLMs as fully automanous AI agents. A recent Nature paper \cite{ZhouNature2024} has also discussed similar observations.
-  
-  2. \textbf{Partial correctness}: In more complex tasks, LLMs sometimes generated partially correct result with right shapes but wrong relative positions. This is shown in the light green ``Partially Correct'' part of the bar chart.
-  
-  3. \textbf{Wrong shapes}: Incorrect shapes often result from LLMs making basic arithmetic errors. For instance, in the ``Hexagon'' task, Llama-3.1-405B once used an internal angle of 120 degrees, producing a triangle instead of a hexagon. However, in other runs, it correctly calculated the angle based on the number of edges. Many of these errors can be mitigated through Chain-of-Thought (CoT) prompting, which encourages the model to do calculations step-by-step.
+1. \textbf{Scaling errors}: LLMs often struggled with unit conversion, failing to scale shapes from millimeters to micrometers (gdspy's default unit). This issue was particularly prevalent in Llama-3 models as can be seen from the dark blue ``Wrong Scale'' part of bar chart. They sometimes even assumed the user had made a mistake by requesting millimeters, and proceeded to 
+draw in micrometers instead, justifying this choice 
+with comments like "not mm, as the GDSII format is in 
+micrometers". This type of ``arrogant'' behavior and 
+misalignment with human instructions on simple tasks 
+will be very harmful for deploying LLMs as fully 
+automanous AI agents. A recent Nature paper \cite
+{ZhouNature2024} has also discussed similar 
+observations. (see Appendix \ref{appendix:scaling_errors} for detailed examples).
 
-  4. \textbf{Runtime errors}: Approximately one third of the generated code from the evaluated LLMs resulted in exceptions and failed to execute. The most frequent error, \textit{AttributeError: module 'gdspy' has no attribute 'LayoutViewer'}, occurred 26 times (59.09\%) with GPT-4o and 33 times (61.11\%) with Claude-3.5-Sonnet. In contrast, this error was reported only once each for Llama-3.1-70B and o1-preview, and not at all for Llama-3.1-405B, indicating that GPT-4o and Claude-3.5-Sonnet are trying to be ``helpful'' by providing GUI output (sometimes this is provided in comments), which is not available in the runtime environment and caused errors. This is not entirely LLM's fault, but due to missing specification about runtime environment in the prompt. In order to make a fair comparison, we re-ran the generated code with `LayoutViewer' line commented out. Figure \ref{fig:baseline-llm-performance} are showing the adjusted results. The second most common errors were due to hallucinations of nonexistent `gdspy` functions or methods, including various `AttributeErrors` (e.g., `'CrossSection'`, `'Circular'`, `'Ellipse'`) and `TypeErrors`. This also includes spelling error, for example, miss spelling \textit{gdspy.Text} as \textit{gdspy.text}. Additionally, other frequent issues involved typical programming logic mistakes such as missing module imports or incorrect function parameters. For more details, see the error report in (Appendix).
-  
-  5. \textbf{Inefficient code}: There's one special case that we'd like to point out. In the DLDChip task, which involves creating a dense array of identical shapes, the Llama-3.1-405B model generated a code that created a large number of objects and performed numerous boolean operations, leading to high memory usage and extended execution time. We have to kill the code after about 15 mins of waiting. 
+2. \textbf{Partial correctness}: In complex tasks, LLMs sometimes generated partially correct results with right shapes but wrong relative positions.
 
-  6. \textbf{Ambiguous instructions}: In some of the results, we observed that the LLMs results mainly fall into two categories. After inspecting the prompts, we found that the instructions can be interpreted in two ways. In this case, we count both type of results as correct. But when implementing copilot, the agent should ask for clarification if the instructions are ambiguous.
+3. \textbf{Shape errors}: Incorrect shapes often resulted from basic arithmetic errors, such as miscalculating angles for polygons (see Appendix \ref{appendix:shape_errors} for specific examples). Many of these errors can be mitigated 
+through Chain-of-Thought (CoT) prompting, which 
+encourages the model to do calculations step-by-step.
+
+4. \textbf{Runtime errors}: Approximately one-third of the generated code failed to execute due to various issues, including:
+   - Attempts to use unavailable GUI features (particularly in GPT-4o and Claude-3.5-Sonnet)
+   - Hallucinations of nonexistent gdspy functions
+   - Typical programming logic mistakes
+   (See Appendix \ref{appendix:runtime_errors} for a detailed error report)
+
+5. \textbf{Inefficient code}: In one particular case, the Llama-3.1-405B model generated code with excessive object creation and boolean operations, leading to high memory usage and extended execution times (see Appendix \ref{appendix:inefficient_code} for the DLDChip task example).
+
+6. \textbf{Ambiguous instructions}: When prompts could be interpreted in multiple ways, LLMs sometimes produced divergent results, highlighting the need for clear and specific instructions (see Appendix \ref{appendix:ambiguous_instructions} for examples).
 
 Many of these issues can be mitigated by augmenting the LLMs with more advanced setup. Specifically, using Retrieval-Augmented Generation (RAG) to provide gdspy documentation to the LLMs, we should be able to reduce the errors related to misspelling and hallucinating nonexistent functions. For complex tasks, we can provide example code of simple shapes for In-Context Learning, so the LLMs only need to reason about positioning and scaling, and avoid runtime errors. We will discuss more in Section 3.
 
@@ -145,18 +159,53 @@ While LLMs show promise as layout design copilots, further advancements in reaso
 \appendix
 
 \section{Appendix}
-\subsection{Task Prompts and Ground Truth}
+\subsection{Task Prompts}
 \label{appendix:task_prompts}
 
-% TODO: Add the complete set of 25 task prompts and their corresponding ground truth outputs
+% TODO: Add the complete set of 25 task prompts
 % This will provide a comprehensive view of the tasks used in the evaluation
 
-\subsection{Baseline LLM Performance Details}
+\subsection{Baseline LLM Performance Details and Ground Truth}
 \label{appendix:baseline_performance}
 
 % TODO: Add detailed error analysis and statistics from Section 2
 % This will include a breakdown of error types, frequencies, and examples for each LLM
 
+\subsection{Errors in Baseline Experiment}
+\label{appendix:baseline_errors}
+
+\subsubsection{Scaling Errors}
+\label{appendix:scaling_errors}
+
+The default unit in the gdspy library is micrometers. We requested basic shapes to be drawn in millimeters to test whether LLMs could correctly handle this unit conversion. All LLMs struggled to various degrees:
+
+a) Some LLMs failed to pay attention to the requested unit (millimeters) and did not perform the necessary scaling.
+
+b) In some cases, LLMs paid attention to the requested unit but made incorrect assumptions about gdspy's default unit. We observed hallucinations of millimeters (Llama), nanometers (Claude), and meters (GPT-4o).
+
+c) As mentioned in the main text, Llama-3 models were especially vulnerable to this issue. They sometimes assumed the user had made a mistake by requesting millimeters, and proceeded to draw in micrometers instead, justifying this choice with comments like "not mm, as the GDSII format is in micrometers". This type of "arrogant" behavior and misalignment with human instructions on simple tasks could be harmful for deploying LLMs as fully autonomous AI agents. A recent Nature paper \cite{ZhouNature2024} has also discussed similar observations.
+
+\subsubsection{Shape Errors}
+\label{appendix:shape_errors}
+
+Incorrect shapes often resulted from LLMs making basic arithmetic errors. For instance, in the "Hexagon" task, Llama-3.1-405B once used an internal angle of 120 degrees, producing a triangle instead of a hexagon. However, in other runs, it correctly calculated the angle based on the number of edges. Many of these errors can be mitigated through Chain-of-Thought (CoT) prompting, which encourages the model to do calculations step-by-step.
+
+\subsubsection{Runtime Errors}
+\label{appendix:runtime_errors}
+
+The most frequent error, \textit{AttributeError: module 'gdspy' has no attribute 'LayoutViewer'}, occurred 26 times (59.09\%) with GPT-4o and 33 times (61.11\%) with Claude-3.5-Sonnet. In contrast, this error was reported only once each for Llama-3.1-70B and o1-preview, and not at all for Llama-3.1-405B. This indicates that GPT-4o and Claude-3.5-Sonnet attempted to provide GUI output, which was not available in the runtime environment. However, this is not entirely LLM's fault, but due to missing specification about runtime environment in the prompt. In order to make a fair comparison, we re-ran all the generated code with `LayoutViewer' line commented out. Figure \ref{fig:baseline-llm-performance} are showing the adjusted results. 
+
+Other common errors were due to hallucinations of nonexistent `gdspy` functions or methods, including various `AttributeErrors` (e.g., `'CrossSection'`, `'Circular'`, `'Ellipse'`) and `TypeErrors`. This also includes spelling errors, for example, misspelling \textit{gdspy.Text} as \textit{gdspy.text}.
+
+\subsubsection{Inefficient Code Example}
+\label{appendix:inefficient_code}
+
+In the DLDChip task, which involves creating a dense array of identical shapes, the Llama-3.1-405B model generated code that created a large number of objects and performed numerous boolean operations. This led to high memory usage and extended execution time, requiring the code to be terminated after approximately 15 minutes of runtime.
+
+\subsubsection{Ambiguous Instructions}
+\label{appendix:ambiguous_instructions}
+
+In some cases, we observed that the LLM results mainly fell into two categories. After inspecting the prompts, we found that the instructions could be interpreted in two ways. In these cases, we counted both types of results as correct. However, when implementing a copilot, the agent should ask for clarification if the instructions are ambiguous.
 
 \subsection{Via Connection Test Cases}
 \label{appendix:via_connection}
@@ -218,5 +267,7 @@ By providing detailed information like this, you can ensure that the design is a
 
 % TODO: Include additional performance metrics and analysis not covered in the main text
 % This may include execution time comparisons, memory usage, etc.
+
+
 
 \end{document}
