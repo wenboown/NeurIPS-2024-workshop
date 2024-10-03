@@ -55,8 +55,7 @@
 \maketitle
 
 \begin{abstract}
-  % Update abstract to reflect the content of the paper
-  This paper explores the potential of large language models (LLMs) as a ``layout design copilot'' in various domains such as semiconductor, IC, and microfluidics. We evaluate the capabilities of LLMs in generating basic elements and combining them into complex designs. Our experiments focus on via connections, microfluidics channel design, and fiducial marker generation. We discuss the opportunities and challenges of using LLMs in layout design, highlighting the importance of providing expert knowledge and context to improve their performance.
+  This paper explores the potential of large language models (LLMs) as a ``layout design copilot'' in semiconductor and integrated circuit (IC) design. We evaluate the baseline performance of state-of-the-art LLMs on a set of 25 layout design tasks, revealing common mistakes and limitations. We explores spatial reasoning and knowledge application capabilities of LLMs through the Via Connection test case. We introduce a novel Neuro-inspired LLM Reasoning Network architecture, called SOLOMON, which significantly improves performance on these tasks. The paper discusses the challenges of using LLMs in layout design and brainstorms future research directions.
 \end{abstract}
 
 \section{Introduction}
@@ -64,12 +63,7 @@ The semiconductor industry faces significant challenges in automating the layout
 
 While traditional layout design software has struggled to address these challenges, Large Language Models (LLMs) offer a promising solution. LLMs' ability to understand natural language instructions and generate code makes them ideal candidates for a ``layout design copilot''. This new paradigm could allow human designers to focus on high-level tasks requiring creativity and intuition, while the LLM-powered copilot generates or modifies the layout code based on human intent.
 
-In this paper, we explore the capabilities and limitations of LLMs with a properitary dataset of 25 common semiconductor layout design tasks. Our main contributions are: 
-(Section 2) Evaluating the baseline performance of five state-of-the-art LLMs on layout design tasks with zero-shot prompting; Identifying common errors and proposing how to use Retrieval-Augmented Generation (RAG) and In-Context Learning to address them. 
-(Section 3) Documenting an iterative design process of multimodal inputs with GPT-4o for a complex task (ViaConnection), illustrating the limitations of current LLMs in spatial reasoning. 
-(Section 4) Introducing a novel Neuro-inspired LLM Reasoning Network architecture that leverages multiple LLMs to improve reasoning capabilities and mitigate hallucinations in layout design tasks. Presenting preliminary results. 
-
-Finally, Section 5 concludes the paper and discusses future research directions.
+This paper explores the capabilities and limitations of LLMs in semiconductor layout design tasks. We evaluate the baseline performance of state-of-the-art LLMs, document an iterative design process with multimodal inputs, and introduce a novel Neuro-inspired LLM Reasoning Network architecture to improve reasoning capabilities and mitigate hallucinations.
 
 \section{Baseline LLM Performance in Layout Design}
 
@@ -126,21 +120,24 @@ To test this hypothesis, we run the 25 tasks through the IBM properitary System 
 \begin{figure}[h]
   \centering
   \includegraphics[width=\textwidth]{judges-performance.png}
-  \caption{Performance comparison between 4 instances of SOLOMON using classic non-reasoning LLMs versus o1-preview, the SOTA of reasoning LLM.}
+  \caption{Performance comparison between 4 instances of SOLOMON built with classic non-reasoning LLMs versus o1-preview, the SOTA of reasoning LLM.}
   \label{fig:judges-performance}
 \end{figure}
 
 Figure \ref{fig:judges-performance} shows the SOLOMON' performance on same 25 tasks. We used the 5 runs from GPT-4o, Claude, and 2 Llama-3.1 models, total 20 ``Thoughts'', including the code, error report, and rendered GDSII images (but only for GPT-4o and Claude, because the Llama-3.1 models doesn't support vision input); and then we created 4 instances of SOLOMON each using one of the 4 LLMs acting as a Thought Assessor to assess the 20 ``Thoughts'' in order to generate an improved results. The o1-preview result in the figure is copied from the baseline LLM performance, only showing for comparison purpose. We can see that performance is improved for all the 4 LLMs compared to their baseline, especially the runtime error is almost completely eliminated. It is also noticible that the improvement for GPT-4o and Claude are more significant than for Llama-3.1 models, which is due to the fact that they can provide vision input which assists the spatial reasoning. Without the vision input, the Llama-3.1 models can only avoid the runtime errors, but cannot evaluate which ``Thought'' is better in terms of spatial layout.
 
 \section{Conclusion and Future Work}
-% Recap the main findings and insights
-% Discuss the potential of LLMs in layout design and the challenges to overcome
-% Outline future research directions:
-%   - Dealing with more complicated designs
-%   - Creating a benchmark to test LLM capabilities in layout design tasks
-% Final thoughts on the role of LLMs as a "layout design copilot"
-agent \cite{Ho2024-cd}
-other domains, like mechanics, architecture (3d virtual space \cite{Sasazawa2024-wf})
+The introduction of the SOLOMON architecture significantly improved performance, particularly in reducing runtime errors and enhancing spatial reasoning capabilities. However, challenges remain in translating domain knowledge into practical design requirements.
+
+Future research directions include:
+1. Creating comprehensive benchmarks for LLM capabilities in layout design tasks.
+2. Exploring more configurations of SOLOMON architecture to understand the interaction between quality of initial thoughts vs assessment by ensemble, i.e., system 1 vs system 2 contributions in reasoning tasks.
+3. Exploring stacking layers of SOLOMON architecture to form a hierarchical reasoning model, for recalling and reasoning domain knowledge for solving the task on hand.
+4. Exploring the adaptability of SOLOMON architecture across different domains.
+
+While LLMs show promise as layout design copilots, further advancements in reasoning capabilities and domain knowledge application are necessary for their effective integration into semiconductor design processes and other domain specific tasks.
+
+\textbf{Acknowledgment:} We thank Kuan Yu Hsieh for her valuable contribution in creating the dataset of 25 tasks with ground truth and her exploration work on the via connection test cases.
 
 \printbibliography %Prints bibliography
 
