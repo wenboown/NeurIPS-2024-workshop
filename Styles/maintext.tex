@@ -119,6 +119,13 @@ This finding underscores the importance of improving LLMs' reasoning capability 
 
 \section{Neuro-inspired LLM Reasoning Network Architecture}
 
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\textwidth]{judges-performance.png}
+  \caption{Judges' Performance on LLM-generated Layouts}
+  \label{fig:judges-performance}
+\end{figure}
+
 In this section, we present a novel Neuro-inspired LLM Reasoning Network Architecture designed to enhance the reasoning capabilities of large language models (LLMs) and mitigate the issue of hallucinations in generated outputs. This architecture is particularly well-suited for complex domains such as semiconductor layout design, where the ability to generate accurate and consistent results is critical.
 
 The proposed architecture is inspired by the Brain-like AGI and the Free Energy Principle (FEP) theory. It consists of three main components: Thought Generator Pool, Thought Assessors, and a Steering Subsystem. The Thought Generator Pool is a multi-LLM network that generates initial attempts at a given task by exploring different approaches and perspectives. This multi-LLM approach allows for a more comprehensive exploration of the problem space compared to traditional single-model approaches. It is effectively a Tree-of-Thoughts combined with parallel searching. Because different LLMs have distinct pre-train data and architecture and embedding spaces, this approach can effectively sample diverse solutions from human knowledge space.
