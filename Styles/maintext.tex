@@ -55,7 +55,7 @@
 \maketitle
 
 \begin{abstract}
-  This paper explores the potential of large language models (LLMs) as an adaptive "layout design copilot" in semiconductor and integrated circuit (IC) design. We evaluate the baseline performance of state-of-the-art LLMs on a set of 25 layout design tasks, revealing common mistakes and limitations. We explore spatial reasoning and knowledge application capabilities of LLMs through the Via Connection test case, demonstrating the challenges of adapting general-purpose models to specialized domains. We introduce a novel Neuro-inspired LLM Reasoning Network architecture, called SOLOMON, which significantly improves performance on these tasks through In-Context Learning and Prompt Tuning. The paper discusses the challenges of using LLMs in layout design and proposes future research directions for developing more adaptive and domain-specific foundation models.
+  This paper explores the potential of large language models (LLMs) as an adaptive ``layout design copilot'' in semiconductor and integrated circuit (IC) design. We evaluate the baseline performance of state-of-the-art LLMs on a set of 25 layout design tasks, revealing common mistakes and limitations. We explore spatial reasoning and knowledge application capabilities of LLMs through the Via Connection test case, demonstrating the challenges of adapting general-purpose models to specialized domains. We introduce a novel Neuro-inspired LLM Reasoning Network architecture, called SOLOMON, which significantly improves performance on these tasks through In-Context Learning and Prompt Tuning. The paper discusses the challenges of using LLMs in layout design and proposes future research directions for developing more adaptive AI systems.
 \end{abstract}
 
 \section{Introduction}
@@ -70,14 +70,12 @@ This paper explores the capabilities and limitations of LLMs in semiconductor la
 \section{Baseline LLM Performance in Layout Design}
 
 We evaluated the performance of five large language models (LLMs) - GPT-4o\cite{GPT-4o}, Claude-3.5-Sonnet\cite{Claude-3.5-Sonnet}, Llama-3.1-70B\cite{Llama-3.1-70B}, Llama-3.1-405B\cite{Llama-3.1-405B} and the new ``reasoning model'', o1-preview\cite{o1-preview} - on a set of 25 layout design tasks. Each tasks have been run 5 times with same prompt and temperature = 0.7. The LLMs are asked to write a python code with gdspy\cite{gdspy} and generate a GDSII file. We then run the LLM written code in a Linux VM and further convert the generated GDSII file to png images for human evaluation. These tasks were categorized into four groups: Basic Shapes 1, Basic Shapes 2, Advanced Shapes, and Complex Structures. Figure \ref{fig:baseline-llm-performance} presents a summary of the LLMs' performance across the task categories. See Appendix for the task prompts and detailed results.
-
 \begin{figure}[h]
   \centering
   \includegraphics[width=\textwidth]{baseline-llm-performance.png}
   \caption{Baseline LLM Performance on Layout Design Tasks}
   \label{fig:baseline-llm-performance}
 \end{figure}
-
 The results reveal several common mistakes and limitations of standalone LLMs in handling layout design tasks:
 
 1. \textbf{Scaling errors}: LLMs often struggled with unit conversion, failing to scale shapes from millimeters to micrometers (gdspy's default unit). This issue was particularly prevalent in Llama-3 models as can be seen from the dark blue ``Wrong Scale'' part of bar chart. They sometimes even assumed the user had made a mistake by requesting millimeters, and proceeded to 
@@ -92,7 +90,7 @@ observations. (see Appendix \ref{appendix:scaling_errors} for detailed examples)
 
 2. \textbf{Partial correctness}: In complex tasks, LLMs sometimes generated partially correct results with right shapes but wrong relative positions.
 
-3. \textbf{Shape errors}: Incorrect shapes often resulted from basic arithmetic errors, such as miscalculating angles for polygons (see Appendix \ref{appendix:shape_errors} for specific examples). Many of these errors can be mitigated 
+3. \textbf{Shape errors}: Incorrect shapes often resulted from basic arithmetic errors, such as miscalculating angles for polygons (see Appendix \ref{appendix:shape_errors}). Many of these errors can be mitigated 
 through Chain-of-Thought (CoT) prompting, which 
 encourages the model to do calculations step-by-step.
 
