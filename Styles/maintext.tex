@@ -80,7 +80,7 @@ The results reveal several common mistakes and limitations of standalone LLMs in
 
 1. \textbf{Scaling errors}: LLMs often struggled with unit conversion, failing to scale shapes from millimeters to micrometers (gdspy's default unit). This issue was particularly prevalent in Llama-3 models as can be seen from the dark blue ``Wrong Scale'' part of bar chart. They sometimes even assumed the user had made a mistake by requesting millimeters, and proceeded to 
 draw in micrometers instead, justifying this choice 
-with comments like "not mm, as the GDSII format is in 
+with comments like "not mm, as the GDSII format is 
 micrometers". This type of ``arrogant'' behavior and 
 misalignment with human instructions on simple tasks 
 will be very harmful for deploying LLMs as fully 
@@ -165,17 +165,51 @@ While LLMs show promise as layout design copilots, further advancements in reaso
 \appendix
 
 \section{Appendix}
-\subsection{Task Prompts}
-\label{appendix:task_prompts}
+\subsection{Task Prompts and Baseline LLM Performance}
+\label{appendix:task_prompts_and_performance}
 
-% TODO: Add the complete set of 25 task prompts
-% This will provide a comprehensive view of the tasks used in the evaluation
+This section presents the 25 tasks used in our evaluation, along with the performance of various LLMs and the SOLOMON system. For each task, we provide the prompt, the ground truth image, and a table showing the outputs from different LLMs across 5 runs, as well as the SOLOMON result.
 
-\subsection{Baseline LLM Performance Details and Ground Truth}
-\label{appendix:baseline_performance}
+The system prompt used for baseline experiment (thought generating) for all tasks was as follows:
 
-% TODO: Add detailed error analysis and statistics from Section 2
-% This will include a breakdown of error types, frequencies, and examples for each LLM
+\begin{verbatim}
+You are an expert Python developer specialized in generating layout designs 
+in GDS (GDSII) format. Your task is to assist the user in creating Python 
+code that accurately draws layout designs while being mindful of the 
+geometric relationships and layout accuracy.
+
+Write down your thinking step by step before you start coding:
+1. Always start by understanding the overall design requirements provided 
+   by the user.
+2. Break down the design into smaller components and define each geometric 
+   shape with precise coordinates.
+3. Ensure that all shapes and elements maintain their correct geometric 
+   relationships, such as alignment, spacing, and proportional dimensions.
+4. Validate each step of the design process to avoid errors and maintain 
+   accuracy.
+
+Use the 'gdspy' library to generate the GDS layout:
+1. Parse the user's design specifications.
+2. Define the library and cell for the GDS layout.
+3. Create each geometric element (e.g., rectangles, polygons) with precise 
+   coordinates.
+4. Ensure elements are placed correctly and maintain their intended 
+   relationships.
+5. Save the design to a GDS file.
+
+Provide all the code in a single ```python ``` block to the user without 
+postamble. Do not include any other ``` block in your response to avoid 
+parsing error in following steps.
+
+Be meticulous in your approach, and always consider the geometric 
+relationships and layout accuracy in every step of the design process.
+\end{verbatim}
+
+From table 1 to 5, we show selected examples from each category of tasks where the LLMs having trouble with the task.
+
+\input{plot_experiment.tex}
+
+This comprehensive presentation of tasks, prompts, ground truths, and LLM outputs provides a clear view of the performance and capabilities of different models in generating GDSII layouts. It allows for easy comparison between the expected results and the actual outputs from various LLMs and the SOLOMON system.
 
 \subsection{Errors in Baseline Experiment}
 \label{appendix:baseline_errors}
@@ -185,11 +219,11 @@ While LLMs show promise as layout design copilots, further advancements in reaso
 
 The default unit in the gdspy library is micrometers. We requested basic shapes to be drawn in millimeters to test whether LLMs could correctly handle this unit conversion. All LLMs struggled to various degrees:
 
-a) Some LLMs failed to pay attention to the requested unit (millimeters) and did not perform the necessary scaling.
+(a) Some LLMs failed to pay attention to the requested unit (millimeters) and did not perform the necessary scaling.
 
-b) In some cases, LLMs paid attention to the requested unit but made incorrect assumptions about gdspy's default unit. We observed hallucinations of millimeters (Llama), nanometers (Claude), and meters (GPT-4o).
+(b) In some cases, LLMs paid attention to the requested unit but made incorrect assumptions about gdspy's default unit. We observed hallucinations of millimeters (Llama), nanometers (Claude), and meters (GPT-4o).
 
-c) As mentioned in the main text, Llama-3 models were especially vulnerable to this issue. They sometimes assumed the user had made a mistake by requesting millimeters, and proceeded to draw in micrometers instead, justifying this choice with comments like "not mm, as the GDSII format is in micrometers". This type of "arrogant" behavior and misalignment with human instructions on simple tasks could be harmful for deploying LLMs as fully autonomous AI agents. A recent Nature paper \cite{ZhouNature2024} has also discussed similar observations.
+(c) As mentioned in the main text, Llama-3 models were especially vulnerable to this issue. They sometimes assumed the user had made a mistake by requesting millimeters, and proceeded to draw in micrometers instead, justifying this choice with comments like "not mm, as the GDSII format is in micrometers". This type of "arrogant" behavior and misalignment with human instructions on simple tasks could be harmful for deploying LLMs as fully autonomous AI agents. A recent Nature paper \cite{ZhouNature2024} has also discussed similar observations.
 
 \subsubsection{Shape Errors}
 \label{appendix:shape_errors}
@@ -199,9 +233,80 @@ Incorrect shapes often resulted from LLMs making basic arithmetic errors. For in
 \subsubsection{Runtime Errors}
 \label{appendix:runtime_errors}
 
-The most frequent error, \textit{AttributeError: module 'gdspy' has no attribute 'LayoutViewer'}, occurred 26 times (59.09\%) with GPT-4o and 33 times (61.11\%) with Claude-3.5-Sonnet. In contrast, this error was reported only once each for Llama-3.1-70B and o1-preview, and not at all for Llama-3.1-405B. This indicates that GPT-4o and Claude-3.5-Sonnet attempted to provide GUI output, which was not available in the runtime environment. However, this is not entirely LLM's fault, but due to missing specification about runtime environment in the prompt. In order to make a fair comparison, we re-ran all the generated code with `LayoutViewer' line commented out. Figure \ref{fig:baseline-llm-performance} are showing the adjusted results. 
+This section provides a detailed breakdown of the errors encountered during the baseline experiment for each LLM. The most frequent error across all models was \textit{AttributeError: module 'gdspy' has no attribute 'LayoutViewer'}, occurring 26 times (59.09\%) with GPT-4o and 33 times (61.11\%) with Claude-3.5-Sonnet. This error was less common in other models, appearing only once each for Llama-3.1-70B and o1-preview, and not at all for Llama-3.1-405B.
 
-Other common errors were due to hallucinations of nonexistent `gdspy` functions or methods, including various `AttributeErrors` (e.g., `'CrossSection'`, `'Circular'`, `'Ellipse'`) and `TypeErrors`. This also includes spelling errors, for example, misspelling \textit{gdspy.Text} as \textit{gdspy.text}.
+The prevalence of this error indicates that GPT-4o and Claude-3.5-Sonnet attempted to provide GUI output, which was unavailable in the runtime environment. However, this issue stems from a lack of specification about the runtime environment in the prompt, rather than being entirely the LLMs' fault.
+
+To ensure a fair comparison, we re-ran all generated code with `LayoutViewer` lines commented out. The analysis presented in Figure \ref{fig:baseline-llm-performance} and the following breakdown reflect these adjusted results.
+
+Other common errors included hallucinations of nonexistent `gdspy` functions or methods, resulting in various `AttributeErrors` (e.g., `'CrossSection'`, `'Circular'`, `'Ellipse'`) and `TypeErrors`. Some errors were due to spelling mistakes, such as misspelling \textit{gdspy.Text} as \textit{gdspy.text}.
+
+The subsequent analysis presents a detailed error breakdown for each LLM, ranked by ascending number of errors.
+
+\paragraph{o1-preview}
+Total errors: 12
+
+The main errors for o1-preview included:
+\begin{itemize}
+    \item TypeError: GdsLibrary.write\_gds() got an unexpected keyword argument 'unit' (16.67\%)
+    \item SyntaxError: invalid syntax (16.67\%)
+    \item Various TypeErrors and AttributeErrors related to unexpected keyword arguments or missing attributes (66.66\%)
+\end{itemize}
+
+\paragraph{GPT-4o}
+Total errors: 18
+
+The most common errors for GPT-4o were:
+\begin{itemize}
+    \item TypeError related to unexpected keyword arguments (27.78\%)
+    \item SyntaxError: invalid syntax (16.67\%)
+    \item TypeError: 'float' object cannot be interpreted as an integer (11.11\%)
+\end{itemize}
+
+Other errors included various AttributeErrors, IndexErrors, and ValueErrors, each occurring once or twice.
+
+\paragraph{Claude-3-5-sonnet}
+Total errors: 21
+
+The most frequent error for Claude-3-5-sonnet was:
+\begin{itemize}
+    \item TypeError: Text.\_\_init\_\_() got an unexpected keyword argument 'anchor' (38.10\%)
+\end{itemize}
+
+Other errors included:
+\begin{itemize}
+    \item TypeError: Path.\_\_init\_\_() got an unexpected keyword argument 'layer' (9.52\%)
+    \item Various TypeErrors, ValueErrors, and AttributeErrors, each occurring once (52.38\%)
+\end{itemize}
+
+\paragraph{Llama-3-405b}
+Total errors: 36
+
+The most frequent errors for Llama-3-405b were:
+\begin{itemize}
+    \item TypeError: 'int' object is not subscriptable (8.33\%)
+    \item SyntaxError: invalid syntax (8.33\%)
+    \item Various TypeErrors related to unexpected keyword arguments or multiple values for arguments (16.68\%)
+\end{itemize}
+
+This model also encountered several ValueErrors and AttributeErrors.
+
+\paragraph{Llama-3-70b}
+Total errors: 68
+
+The most prevalent error for Llama-3-70b was:
+\begin{itemize}
+    \item AttributeError: module 'gdspy' has no attribute 'Library'. Did you mean: 'library'? (36.76\%)
+\end{itemize}
+
+Other common errors included:
+\begin{itemize}
+    \item TypeError: GdsLibrary.write\_gds() got an unexpected keyword argument 'unit' (7.35\%)
+    \item SyntaxError related to assignment (5.88\%)
+    \item Various TypeErrors and AttributeErrors related to unexpected keyword arguments or missing attributes (25.00\%)
+\end{itemize}
+
+These error patterns suggest that all models struggled with correctly using the gdspy library, often attempting to use non-existent attributes or passing incorrect arguments to functions. Syntax errors were also common across models, indicating issues with code structure and Python syntax.
 
 \subsubsection{Inefficient Code Example}
 \label{appendix:inefficient_code}
@@ -266,14 +371,5 @@ By providing detailed information like this, you can ensure that the design is a
 \textbf{Test 5:} "I have sketched a design for 3d packaging, where we have a metal connecting two TSVs , please generate the python code to draw a GDSII for this design."
 
 \textbf{Test 6:} "I have sketched a design for 3d packaging, where we have a metal connecting two TSVs , please generate the python code to draw a GDSII based on the sketch. each color represents an individual layer. The metal connection should fully cover the vias, extending slightly beyond their edges. Ensure the metal connection is slightly wider than the via diameter to provide full coverage."
-
-
-\subsection{Additional Performance Metrics}
-\label{appendix:performance_metrics}
-
-% TODO: Include additional performance metrics and analysis not covered in the main text
-% This may include execution time comparisons, memory usage, etc.
-
-
 
 \end{document}
