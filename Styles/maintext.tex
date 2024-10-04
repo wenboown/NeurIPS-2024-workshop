@@ -33,8 +33,7 @@
 \usepackage{microtype}      % microtypography
 \usepackage{xcolor}         % colors
 
-\usepackage{biblatex} %Imports biblatex package
-\addbibresource{bibliography.bib} %Import the bibliography file
+\usepackage{natbib}
 
 \title{Semiconductor Layout Design with Large Language Models: Opportunities and Challenges}
 
@@ -159,7 +158,14 @@ While LLMs show promise as layout design copilots, further advancements in reaso
 
 \textbf{Acknowledgment:} We thank Kuan Yu Hsieh for her valuable contribution in creating the dataset of 25 tasks with ground truth and her exploration work on the via connection test cases.
 
-\printbibliography %Prints bibliography
+\bibliographystyle{plainnat}
+\bibliography{bibliography}
+
+% Add the NeurIPS Paper Checklist here, before any supplementary material
+\newpage
+\section*{Checklist}
+
+\input{checklist.tex}
 
 \newpage
 \appendix
