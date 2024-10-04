@@ -1,0 +1,12 @@
+.idea
+/data
+.DS_Store
+.xml
+.aux
+.bbl
+.blg
+.log
+.out
+.pdf
+.synctex.gz
+.tex.backup
