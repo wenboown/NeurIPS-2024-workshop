@@ -2,7 +2,7 @@
   \caption{Arrow Task}
   \label{table:arrow}
   \centering
-  \begin{tabular}{@{}cccccc@{}}
+  \begin{tabularx}{\textwidth}{@{}m{0.2\textwidth}XXXXX@{}}
     \toprule
     \makecell{Ground Truth \\ \includegraphics[width=0.13\textwidth]{examples_png/Arrow.png}} & GPT-4o & Claude-3.5 & Llama-3-70B & Llama-3-405B & o1-preview \\
     \midrule
@@ -15,13 +15,11 @@
     \bottomrule
   \end{tabular}
   \caption*{Question: Generate an Arrow pointing to the right with length 10 mm, make the body 1/3 width of the head, start at 0,0.}
-\end{table}
-
-\begin{table}
+\end{table}\begin{table}
   \caption{BasicLayout Task}
   \label{table:basiclayout}
   \centering
-  \begin{tabular}{@{}cccccc@{}}
+  \begin{tabularx}{\textwidth}{@{}m{0.2\textwidth}XXXXX@{}}
     \toprule
     \makecell{Ground Truth \\ \includegraphics[width=0.13\textwidth]{examples_png/BasicLayout.png}} & GPT-4o & Claude-3.5 & Llama-3-70B & Llama-3-405B & o1-preview \\
     \midrule
@@ -36,13 +34,11 @@
   \caption*{Question: 1. Draw a rectangular active region with dimensions 10 µm x 5 µm.
 2. Place a polysilicon gate that crosses the active region vertically at its center, with a width of 1 µm.
 3. Add two square contact holes, each 1 µm x 1 µm, positioned 1 µm away from the gate on either side along the active region.}
-\end{table}
-
-\begin{table}
+\end{table}\begin{table}
   \caption{MicrofluidicChip Task}
   \label{table:microfluidicchip}
   \centering
-  \begin{tabular}{@{}cccccc@{}}
+  \begin{tabularx}{\textwidth}{@{}m{0.2\textwidth}XXXXX@{}}
     \toprule
     \makecell{Ground Truth \\ \includegraphics[width=0.13\textwidth]{examples_png/MicrofluidicChip.png}} & GPT-4o & Claude-3.5 & Llama-3-70B & Llama-3-405B & o1-preview \\
     \midrule
@@ -55,13 +51,11 @@
     \bottomrule
   \end{tabular}
   \caption*{Question: Draw a design of a microfluidic chip. On layer 0, it is the bulk of the chip. It is a 30 * 20 mm rectangle. On layer 2 (via level), draw two circular vias, with 2 mm radius, and 20 mm apart horizontally. On layer 3 (channel level), draw a rectangular shaped channel (width = 1 mm) that connects the two vias at their center.}
-\end{table}
-
-\begin{table}
+\end{table}\begin{table}
   \caption{ViaConnection Task}
   \label{table:viaconnection}
   \centering
-  \begin{tabular}{@{}cccccc@{}}
+  \begin{tabularx}{\textwidth}{@{}m{0.2\textwidth}XXXXX@{}}
     \toprule
     \makecell{Ground Truth \\ \includegraphics[width=0.13\textwidth]{examples_png/ViaConnection.png}} & GPT-4o & Claude-3.5 & Llama-3-70B & Llama-3-405B & o1-preview \\
     \midrule
@@ -74,13 +68,11 @@
     \bottomrule
   \end{tabular}
   \caption*{Question: Create a design with three layers: via layer (yellow), metal layer (blue), and pad layer (red). The via radius is 10 units, pad radius is 30 units, and metal connection width is 40 units with a total length of 600 units. Position the first via at (50, 150) and the second via at (550, 150). Ensure the metal connection fully covers the vias and leaves a margin of 10 units between the edge of the metal and the pads. Leave a space of 50 units between the vias and the edges of the metal connection.}
-\end{table}
-
-\begin{table}
+\end{table}\begin{table}
   \caption{DLDChip Task}
   \label{table:dldchip}
   \centering
-  \begin{tabular}{@{}cccccc@{}}
+  \begin{tabularx}{\textwidth}{@{}m{0.2\textwidth}XXXXX@{}}
     \toprule
     \makecell{Ground Truth \\ \includegraphics[width=0.13\textwidth]{examples_png/DLDChip.png}} & GPT-4o & Claude-3.5 & Llama-3-70B & Llama-3-405B & o1-preview \\
     \midrule
@@ -94,4 +86,3 @@
   \end{tabular}
   \caption*{Question: Draw a deterministic lateral displacement chip - include channel that can hold the array has gap size = 225 nm, circular pillar size = 400 nm, width = 30 pillars, row shift fraction = 0.1, add an inlet and outlet 40 µm diameter before and after the channel, use a 20*50 µm bus to connect the inlet and outlet to the channel.}
 \end{table}
-
