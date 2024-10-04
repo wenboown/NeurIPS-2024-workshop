@@ -36,7 +36,7 @@
 \usepackage{natbib}
 \usepackage{tabularx}
 
-\title{Semiconductor Layout Design with Large Language Models: Opportunities and Challenges}
+\title{Enhancing Spatial Reasoning in Large Language Models: An Adaptive Approach for Domain-Specific Applications}
 
 \author{%
   Bo Wen\\
@@ -59,13 +59,36 @@
 \end{abstract}
 
 \section{Introduction}
-The semiconductor industry faces significant challenges in automating the layout design for integrated circuits (ICs), microfluidic chips, and other electronic devices. Current graphical user interface (GUI) based design workflows lack adaptability, leading to inefficient, repetitive tasks when creating similar structures with minor variations.\cite{Greengard2024-hx} This approach violates the ``Don't Repeat Yourself'' (DRY) principle and reduces productivity.
+The rapid advancements in large language models (LLMs) have revolutionized various aspects of artificial intelligence, enabling them to understand and generate human-like text. However, the adaptability of these models to domain-specific tasks, particularly those involving reasoning, remains a significant challenge. In this paper, we explore the potential of LLMs in handling spatial reasoning tasks, using semiconductor layout design as a test case. We introduce a novel Neuro-inspired LLM Reasoning Network Architecture called SOLOMON, which aims to enhance the adaptability and reasoning capabilities of LLMs across different domains.
 
-Large Language Models (LLMs) offer a promising solution to layout design challenges. Their ability to understand natural language and generate code makes them ideal "layout design copilots". This allows designers to focus on high-level creative tasks while the LLM generates or modifies layout code. Recent work has shown LLMs' potential in optimizing standard cell layouts, improving area reduction and design rule compliance \cite{Ho2024-cd}. The application of LLMs extends beyond semiconductors, with studies exploring their use in 3D virtual space creation \cite{Sasazawa2024-wf}, demonstrating their versatility.
+Reasoning is a critical aspect of many real-world applications, from chip design to medical diagnosis. While LLMs excel in natural language understanding and generation, they often struggle with tasks requiring complex reasoning, particularly in domain-specific contexts. Traditional approaches to address this limitation, such as fine-tuning LLMs for specific domains, are expensive and lack scalability due to the rapid evolution of both LLM technology and domain requirements. Our work introduces a novel approach that leverages prompt tuning, in-context learning, and retrieval-augmented generation (RAG) to enhance LLMs' reasoning abilities. This method offers several advantages:
 
-However, adapting general-purpose LLMs to specialized domains like semiconductor layout design presents unique challenges. Both LLMs and domain-specific knowledge are rapidly evolving, making traditional fine-tuning approaches less efficient. Fine-tuning is costly, time-consuming, and requires frequent updates as underlying models change, leading to a constant need for retraining.
+1. Quick adaptation to different domains without extensive retraining
+2. Easy upgrading by swapping underlying LLMs without altering the system architecture
+3. Cost-effective solution that eliminates the need for recurrent fine-tuning expenses
 
-This paper explores the capabilities and limitations of LLMs in semiconductor layout design tasks. We evaluate the baseline performance of state-of-the-art LLMs and document an iterative design process with multimodal inputs. We then introduce a novel Neuro-inspired LLM Reasoning Network architecture called SOLOMON. This architecture doesn't rely on particular LLMs, allowing for easy replacement of underlying models while retaining learned domain knowledge through Retrieval-Augmented Generation (RAG) and prompt tuning. Our approach improves reasoning capabilities, mitigates hallucinations, and offers a more flexible solution for adapting to specialized domains. This work contributes to the broader discussion on creating adaptive foundation models that can efficiently incorporate domain-specific knowledge and personalization without the need for constant fine-tuning.
+By focusing on these techniques, our architecture significantly improves the adaptability of LLMs across various domains, making them more versatile for applications where specialized reasoning is crucial.
+
+We demonstrate the effectiveness of our approach through a series of experiments on semiconductor layout design tasks. By comparing the performance of SOLOMON with standalone LLMs and state-of-the-art models like O1-preview, we showcase its superior spatial reasoning capabilities and adaptability. Our test case highlights the importance of reasoning as a key factor in making LLMs adaptable to different domain applications, aligning with the workshop's theme of Adaptive Foundation Models.
+
+The main contributions of this paper are as follows:
+1. We introduce SOLOMON, a novel Neuro-inspired LLM Reasoning Network Architecture that enhances the spatial reasoning capabilities and adaptability of LLMs.
+2. We demonstrate the effectiveness of SOLOMON in handling spatial reasoning tasks, using semiconductor layout design as a test case.
+3. We compare the performance of SOLOMON with standalone LLMs and state-of-the-art models, showcasing its superiority in spatial reasoning and adaptability across domains.
+
+\section{Neuro-inspired LLM Reasoning Network Architecture}
+SOLOMON's architecture is inspired by Brain-like AGI \cite{Byrnes2022} and the Free Energy Principle (FEP) theory \cite{Parr2022}. It uses a pool of thoughts from multiple LLMs to extract the best reasoning plan, focusing on relevant information and avoiding common pitfalls. This approach leverages the FEP's claim of human attention being focused on minimizing the differences between goals and perceptions.
+
+The key components of SOLOMON are:
+
+1. Thought Generators: A diverse pool of LLMs, each tasked with generating thoughts for the target task. This approach implements an efficient parallel search through the Tree-of-Thoughts \cite{yao2023treethoughtsdeliberateproblem, zhang2024cumulativereasoninglargelanguage, Besta_2024, besta2024demystifyingchainstreesgraphs}, mitigating potential biases inherent in single LLM knowledge bases imposted by their pre-trained dataset.
+
+2. Thought Assessor: An LLM-based system that analyzes consensus and differences among the proposed ``Thoughts'' to generate a refined output. This component enhances the common LLM-as-a-Judge method \cite{zheng2023judgingllmasajudgemtbenchchatbot, guerreiro2023lookingneedlehaystackcomprehensive, lin2023llmevalunifiedmultidimensionalautomatic, ji2023mitigatinghallucinationlargelanguage} by incorporating the Free Energy Principle for goal-oriented assessments.
+
+3. Steering Subsystem: A human-operated component that controls the attention focus for the Thought Generators and Thought Assessor. This allows the system to adapt to different domain requirements by simply adjusting the goal of attention, enhancing its versatility across various applications.
+
+It is important to note that the Thought Generator functions as an adaptive Retrieval-Augmented Generation (RAG) system for the Thought Assessor. The pool of multiple LLMs, each possessing distinct knowledge bases and reasoning abilities trained on diverse datasets, provides a more effective RAG system for sampling diverse ideas from the human knowledge base compared to common embedding similarity searches. This system can be further enhanced with proprietary knowledge through classic RAG techniques. The Steering Subsystem's ability to modify goals allows the system to swiftly adapt to different domain requirements by performing goal-directed exploration of the search space. SOLOMON's hierarchical structure inherently enables self-reflection, as the Thought Assessor can effectively guard against hallucinations produced by the Thought Generators, thereby enhancing AI safety and reliability.
+
 
 \section{Baseline LLM Performance in Layout Design}
 
@@ -214,7 +237,7 @@ relationships and layout accuracy in every step of the design process.
 
 From table 1 to 5, we show selected examples from each category of tasks where the LLMs having trouble with the task.
 
-\input{plot_experiment.tex}
+% \input{plot_experiment.tex}
 
 This comprehensive presentation of tasks, prompts, ground truths, and LLM outputs provides a clear view of the performance and capabilities of different models in generating GDSII layouts. It allows for easy comparison between the expected results and the actual outputs from various LLMs and the SOLOMON system.
 
