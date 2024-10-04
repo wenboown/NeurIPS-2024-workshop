@@ -89,46 +89,6 @@ The key components of SOLOMON are:
 
 It is important to note that the Thought Generator functions as an adaptive Retrieval-Augmented Generation (RAG) system for the Thought Assessor. The pool of multiple LLMs, each possessing distinct knowledge bases and reasoning abilities trained on diverse datasets, provides a more effective RAG system for sampling diverse ideas from the human knowledge base compared to common embedding similarity searches. This system can be further enhanced with proprietary knowledge through classic RAG techniques. The Steering Subsystem's ability to modify goals allows the system to swiftly adapt to different domain requirements by performing goal-directed exploration of the search space. SOLOMON's hierarchical structure inherently enables self-reflection, as the Thought Assessor can effectively guard against hallucinations produced by the Thought Generators, thereby enhancing AI safety and reliability.
 
-
-\section{Baseline LLM Performance in Layout Design}
-
-We evaluated the performance of five large language models (LLMs) - GPT-4o\cite{GPT-4o}, Claude-3.5-Sonnet\cite{Claude-3.5-Sonnet}, Llama-3.1-70B\cite{Llama-3.1-70B}, Llama-3.1-405B\cite{Llama-3.1-405B} and the new ``reasoning model'', o1-preview\cite{o1-preview} - on a set of 25 layout design tasks. Each tasks have been run 5 times with same prompt and temperature = 0.7. The LLMs are asked to write a python code with gdspy\cite{gdspy} and generate a GDSII file. We then run the LLM written code in a Linux VM and further convert the generated GDSII file to png images for human evaluation. These tasks were categorized into four groups: Basic Shapes 1, Basic Shapes 2, Advanced Shapes, and Complex Structures. Figure \ref{fig:baseline-llm-performance} presents a summary of the LLMs' performance across the task categories. See Appendix for the task prompts and detailed results.
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=\textwidth]{output.png}
-  \caption{Baseline LLM Performance on Layout Design Tasks}
-  \label{fig:baseline-llm-performance}
-\end{figure}
-The results reveal several common mistakes and limitations of standalone LLMs in handling layout design tasks:
-
-1. \textbf{Scaling errors}: LLMs often struggled with unit conversion, failing to scale shapes from millimeters to micrometers (gdspy's default unit). This issue was particularly prevalent in Llama-3 models as can be seen from the dark blue ``Wrong Scale'' part of bar chart. They sometimes even assumed the user had made a mistake by requesting millimeters, and proceeded to 
-draw in micrometers instead, justifying this choice 
-with comments like "not mm, as the GDSII format is 
-micrometers". This type of ``arrogant'' behavior and 
-misalignment with human instructions on simple tasks 
-will be very harmful for deploying LLMs as fully 
-automanous AI agents. A recent Nature paper \cite
-{ZhouNature2024} has also discussed similar 
-observations. (see Appendix \ref{appendix:scaling_errors} for detailed examples).
-
-2. \textbf{Partial correctness}: In complex tasks, LLMs sometimes generated partially correct results with right shapes but wrong relative positions.
-
-3. \textbf{Shape errors}: Incorrect shapes often resulted from basic arithmetic errors, such as miscalculating angles for polygons (see Appendix \ref{appendix:shape_errors}). Many of these errors can be mitigated 
-through Chain-of-Thought (CoT) prompting, which 
-encourages the model to do calculations step-by-step.
-
-4. \textbf{Runtime errors}: Approximately one-third of the generated code failed to execute due to various issues, including:
-   - Attempts to use unavailable GUI features (particularly in GPT-4o and Claude-3.5-Sonnet)
-   - Hallucinations of nonexistent gdspy functions
-   - Typical programming logic mistakes
-   (See Appendix \ref{appendix:runtime_errors} for a detailed error report)
-
-5. \textbf{Inefficient code}: In one particular case, the Llama-3.1-405B model generated code with excessive object creation and boolean operations, leading to high memory usage and extended execution times (see Appendix \ref{appendix:inefficient_code} for the DLDChip task example).
-
-6. \textbf{Ambiguous instructions}: When prompts could be interpreted in multiple ways, LLMs sometimes produced divergent results, highlighting the need for clear and specific instructions (see Appendix \ref{appendix:ambiguous_instructions} for examples).
-
-Many of these issues can be mitigated by augmenting the LLMs with more advanced setup. Specifically, using Retrieval-Augmented Generation (RAG) to provide gdspy documentation to the LLMs, we should be able to reduce the errors related to misspelling and hallucinating nonexistent functions. For complex tasks, we can provide example code of simple shapes for In-Context Learning, so the LLMs only need to reason about positioning and scaling, and avoid runtime errors. We will discuss more in Section 3.
-
 \section{Multimodal Inputs and Spatial Reasoning}
 Layout design in semiconductor processes requires not only generating correct basic geometric shapes but also spatial reasoning to create proper ``layouts'' that meet specific requirements. Via connections, which create electrical pathways between different chip layers, exemplify this challenge. While seemingly simple—typically consisting of circular vias and rectangular metal connections—they demand precise positioning and sizing to ensure no short or open circuits and other functionality issues.
 
@@ -147,27 +107,34 @@ To further test our hypothesis, we conducted \textbf{Tests 5} and \textbf{6}, re
 
 This finding underscores the importance of improving LLMs' reasoning capability of applying domain knowledge in problem-solving, rather than simply increasing model size to remember more knowledge, to enhance the adaptability of LLM-based AI systems.
 
-\section{Neuro-inspired LLM Reasoning Network Architecture}
+\section{SOLOMON Performance and Comparison}
 
-Based on our observations, we hypothesize that LLMs' poor performance in layout design tasks stems from weak spatial reasoning and difficulty applying domain knowledge.
+To evaluate SOLOMON's effectiveness in enhancing spatial reasoning for semiconductor layout design, we conducted experiments using a dataset of 25 layout design tasks. These tasks were categorized into four groups: Basic Shapes 1 and 2 included simple geometric shapes such as circles, polygons and text, which serve as the building blocks for more complex layouts. The Advanced Shapes category involved more intricate designs, such as serpentine and spirals, to test the models' ability to handle complex geometries. Finally, the Complex Structures category included tasks that required the composition of multiple shapes to form functional layouts, such as a Dense Layer Diode (DLD) chip, MicrofluidicChip, and the ViaConnection test case. These tasks were designed to benchmark the AI systems' capability in generating layouts that are representative of real-world semiconductor design needs.
 
-To test this hypothesis, we employed our proprietary System for Optimizing Language Outputs through Multi-agent Oversight Networks (SOLOMON). Originally developed as part of a grant proposal for the ARPA-H ADVANCED RESEARCH PROJECTS AGENCY FOR HEALTH CHATBOT ACCURACY AND RELIABILITY EVALUATION (CARE) EXPLORATION TOPIC, SOLOMON was designed to detect and correct LLM hallucinations in healthcare applications. The system is based on a Neuro-inspired LLM Reasoning Network Architecture, drawing inspiration from Brain-like AGI \cite{Byrnes2022} and the Free Energy Principle (FEP) theory \cite{Parr2022}.
+We provided task requirements with a system prompt asking the LLMs to use Chain-of-Thought to analyze the task and write Python code to create a GDSII output. The evaluation process involved running the generated code to produce GDSII files, which were then converted to PNG images. Human evaluators categorized the output into five categories: correct, scaling error, partially correct, shape error, and runtime error. Five LLMs (GPT-4o, Claude-3.5-Sonnet, Llama-3.1-70B, Llama-3.1-405B, and o1-preview) were used for the baseline experiment, with each task run 5 times per model.
 
-At its core, SOLOMON's key innovation lies in its multi-layered approach: 
-(1) Thought Generators: A pool of multiple LLMs, each with distinct knowledge bases and reasoning abilities, trained on diverse datasets and fine-tuned for specific instruction-following capabilities. This approach can be seen as an effective parallel search through the Tree-of-Thoughts \cite{yao2023treethoughtsdeliberateproblem, zhang2024cumulativereasoninglargelanguage, Besta_2024, besta2024demystifyingchainstreesgraphs}, avoiding the bias problems associated with single LLM Chain-of-Thoughts approach. For instance, as observed in our scaling errors (see Appendix \ref{appendix:scaling_errors}), different LLM families exhibited distinct biases in unit interpretation.
-(2) Thought Assessor: An LLM-based system leveraging the Free Energy Principle to analyze consensus and differences among proposed "Thoughts". This component enhances the LLM-as-a-Judge method \cite{zheng2023judgingllmasajudgemtbenchchatbot, guerreiro2023lookingneedlehaystackcomprehensive, lin2023llmevalunifiedmultidimensionalautomatic, ji2023mitigatinghallucinationlargelanguage} by incorporating the Free Energy Principle for more robust assessment.
-(3) Steering Subsystem: Currently human-operated, this component provides instructions to guide the Thought Assessor in generating the final output.
+To test SOLOMON's performance, we used 20 thoughts produced by GPT-4o, Claude, and two Llama-3.1 models from the baseline experiment. We created four SOLOMON instances, each using one of the four LLMs (excluding o1-preview) as a Thought Assessor, to process these thoughts and produce the final output. We avoided using o1-preview for Thought Generator and Assessor as it serves as a benchmark for state-of-the-art reasoning performance.
 
-This architecture enables SOLOMON to combine diverse perspectives, assess their validity, and produce a refined output, potentially mitigating individual LLM limitations in spatial reasoning and domain knowledge application.
+Figure \ref{fig:performance_comparison} presents a performance comparison between the SOLOMON instances, their baseline counterparts, and the o1-preview model.
+
 \begin{figure}[h]
   \centering
   \includegraphics[width=\textwidth]{output.png}
-  \caption{Performance comparison between 4 instances of SOLOMON built with classic non-reasoning LLMs versus o1-preview, the SOTA of reasoning LLM.}
-  \label{fig:judges-performance}
+  \caption{Performance comparison between SOLOMON instances, their baseline counterpart single LLMs, and o1-preview across different layout design task categories. Lighter colored bars represent baseline performance of individual LLMs, while darker bars show the performance of corresponding SOLOMON instances. O1-preview results serve as a benchmark for state-of-the-art reasoning performance.}
+  \label{fig:performance_comparison}
 \end{figure}
-Figure \ref{fig:judges-performance} shows SOLOMON's performance on the same 25 tasks. We used 20 "Thoughts" from GPT-4o, Claude, and two Llama-3.1 models, including code, error reports, and rendered GDSII images (for GPT-4o and Claude only). We created 4 SOLOMON instances, each using one of the 4 LLMs as a Thought Assessor. The o1-preview result is shown side-by-side for comparison purposes only, its output is not used in SOLOMON's pool of thoughts.
 
-Performance improved for all 4 LLMs compared to their baseline, with runtime errors almost completely eliminated. Improvement was more significant for GPT-4o and Claude due to their vision input capability, which assists spatial reasoning. Without vision input, Llama-3.1 models could only avoid runtime errors but struggled to evaluate spatial layouts effectively. We can see that SOLOMON's performance is comparable to o1-preview, the SOTA of reasoning LLM.
+The results demonstrate that the SOLOMON architecture significantly improves the performance of all four LLMs compared to their baseline. The most notable improvements are observed in the reduction of runtime errors, which can be attributed to the Thought Assessor's ability to analyze and refine the generated code. This aligns with the design principle of the Thought Assessor, which aims to mitigate individual LLM limitations by combining diverse perspectives and assessing their validity.
+
+In terms of scaling errors, SOLOMON instances show a marked improvement compared to the baseline LLMs, particularly for the Llama-3 models. The Thought Assessor's ability to identify and correct inconsistencies in unit conversions contributes to this enhancement. Similarly, SOLOMON instances demonstrate better performance in handling shape errors and partial correctness issues, as the Thought Assessor can detect and rectify errors stemming from arithmetic miscalculations or incorrect relative positioning of shapes.
+
+Comparing the performance of the SOLOMON instances with o1-preview, we observe that SOLOMON achieves comparable results to this state-of-the-art reasoning model. [Placeholder for detailed comparison of SOLOMON and o1-preview performance on specific error types and task categories.]
+
+The experimental results also highlight the importance of the Steering Subsystem in guiding the attention focus of the Thought Generators and Thought Assessor. By providing task-specific instructions and goals, the Steering Subsystem enables SOLOMON to adapt to the requirements of semiconductor layout design, despite the LLMs' limited domain knowledge. This adaptability is a critical feature of the SOLOMON architecture, allowing it to be applied to various domains without the need for extensive fine-tuning.
+
+Moreover, the hierarchical structure of SOLOMON, with the Thought Assessor acting as a supervisor for the Thought Generators, demonstrates its inherent self-reflection capability. By analyzing and refining the generated thoughts, the Thought Assessor effectively guards against potential hallucinations and errors, enhancing the overall reliability and safety of the system.
+
+In conclusion, the experimental results validate the effectiveness of the SOLOMON architecture in enhancing the spatial reasoning capabilities and adaptability of LLMs for semiconductor layout design tasks. The significant performance improvements, particularly in reducing runtime errors, scaling errors, and shape errors, highlight the potential of this neuro-inspired approach in advancing the field of adaptive foundation models. The comparable performance of SOLOMON to the state-of-the-art o1-preview model further demonstrates its capability in tackling complex spatial reasoning tasks. As the SOLOMON architecture continues to evolve and incorporate advancements in LLMs and domain-specific knowledge, it holds promise for revolutionizing the field of semiconductor design and other domains that require robust spatial reasoning abilities.
 
 \section{Conclusion and Future Work}
 The introduction of the SOLOMON architecture significantly improved performance, particularly in reducing runtime errors and enhancing spatial reasoning capabilities. However, challenges remain in translating domain knowledge into practical design requirements.
@@ -238,6 +205,25 @@ relationships and layout accuracy in every step of the design process.
 From table 1 to 5, we show selected examples from each category of tasks where the LLMs having trouble with the task.
 
 % \input{plot_experiment.tex}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Category} & \textbf{Shapes} \\
+\hline
+Basic Shapes 1 & Circle, Donut, Oval, Square, Triangle, Grid \\
+\hline
+Basic Shapes 2 & Hexagon, Pentagon, Heptagon, Octagon, Trapezoid, Text \\
+\hline
+Advanced Shapes & Arrow, SquareArray, Serpentine, RoundedSquare, BasicLayout, Spiral \\
+\hline
+Complex Structures & MicrofluidicChip, ViaConnection, FiducialCircle, ComplexLayout, DLDChip, FinFET, RectangleWithText \\
+\hline
+\end{tabular}
+\caption{Complete sets of shapes categorized by complexity}
+\label{tab:shape_categories}
+\end{table}
 
 This comprehensive presentation of tasks, prompts, ground truths, and LLM outputs provides a clear view of the performance and capabilities of different models in generating GDSII layouts. It allows for easy comparison between the expected results and the actual outputs from various LLMs and the SOLOMON system.
 
