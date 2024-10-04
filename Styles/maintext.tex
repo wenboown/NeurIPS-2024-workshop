@@ -72,7 +72,7 @@ This paper explores the capabilities and limitations of LLMs in semiconductor la
 We evaluated the performance of five large language models (LLMs) - GPT-4o\cite{GPT-4o}, Claude-3.5-Sonnet\cite{Claude-3.5-Sonnet}, Llama-3.1-70B\cite{Llama-3.1-70B}, Llama-3.1-405B\cite{Llama-3.1-405B} and the new ``reasoning model'', o1-preview\cite{o1-preview} - on a set of 25 layout design tasks. Each tasks have been run 5 times with same prompt and temperature = 0.7. The LLMs are asked to write a python code with gdspy\cite{gdspy} and generate a GDSII file. We then run the LLM written code in a Linux VM and further convert the generated GDSII file to png images for human evaluation. These tasks were categorized into four groups: Basic Shapes 1, Basic Shapes 2, Advanced Shapes, and Complex Structures. Figure \ref{fig:baseline-llm-performance} presents a summary of the LLMs' performance across the task categories. See Appendix for the task prompts and detailed results.
 \begin{figure}[h]
   \centering
-  \includegraphics[width=\textwidth]{baseline-llm-performance.png}
+  \includegraphics[width=\textwidth]{output.png}
   \caption{Baseline LLM Performance on Layout Design Tasks}
   \label{fig:baseline-llm-performance}
 \end{figure}
@@ -138,7 +138,7 @@ At its core, SOLOMON's key innovation lies in its multi-layered approach:
 This architecture enables SOLOMON to combine diverse perspectives, assess their validity, and produce a refined output, potentially mitigating individual LLM limitations in spatial reasoning and domain knowledge application.
 \begin{figure}[h]
   \centering
-  \includegraphics[width=\textwidth]{judges-performance.png}
+  \includegraphics[width=\textwidth]{output.png}
   \caption{Performance comparison between 4 instances of SOLOMON built with classic non-reasoning LLMs versus o1-preview, the SOTA of reasoning LLM.}
   \label{fig:judges-performance}
 \end{figure}
