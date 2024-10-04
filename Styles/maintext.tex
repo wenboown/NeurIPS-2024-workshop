@@ -55,7 +55,7 @@
 \maketitle
 
 \begin{abstract}
-  This paper explores the potential of large language models (LLMs) as a ``layout design copilot'' in semiconductor and integrated circuit (IC) design. We evaluate the baseline performance of state-of-the-art LLMs on a set of 25 layout design tasks, revealing common mistakes and limitations. We explores spatial reasoning and knowledge application capabilities of LLMs through the Via Connection test case. We introduce a novel Neuro-inspired LLM Reasoning Network architecture, called SOLOMON, which significantly improves performance on these tasks. The paper discusses the challenges of using LLMs in layout design and brainstorms future research directions.
+  This paper explores the potential of large language models (LLMs) as an adaptive "layout design copilot" in semiconductor and integrated circuit (IC) design. We evaluate the baseline performance of state-of-the-art LLMs on a set of 25 layout design tasks, revealing common mistakes and limitations. We explore spatial reasoning and knowledge application capabilities of LLMs through the Via Connection test case, demonstrating the challenges of adapting general-purpose models to specialized domains. We introduce a novel Neuro-inspired LLM Reasoning Network architecture, called SOLOMON, which significantly improves performance on these tasks through In-Context Learning and Prompt Tuning. The paper discusses the challenges of using LLMs in layout design and proposes future research directions for developing more adaptive and domain-specific foundation models.
 \end{abstract}
 
 \section{Introduction}
@@ -63,7 +63,9 @@ The semiconductor industry faces significant challenges in automating the layout
 
 While traditional layout design software has struggled to address these challenges, Large Language Models (LLMs) offer a promising solution. LLMs' ability to understand natural language instructions and generate code makes them ideal candidates for a ``layout design copilot''. This new paradigm could allow human designers to focus on high-level tasks requiring creativity and intuition, while the LLM-powered copilot generates or modifies the layout code based on human intent.
 
-This paper explores the capabilities and limitations of LLMs in semiconductor layout design tasks. We evaluate the baseline performance of state-of-the-art LLMs, document an iterative design process with multimodal inputs, and introduce a novel Neuro-inspired LLM Reasoning Network architecture to improve reasoning capabilities and mitigate hallucinations.
+However, adapting general-purpose LLMs to specialized domains like semiconductor layout design presents unique challenges. Both LLMs and domain-specific knowledge are rapidly evolving, making traditional fine-tuning approaches less efficient. Fine-tuning is costly, time-consuming, and requires frequent updates as underlying models change, leading to a constant need for retraining.
+
+This paper explores the capabilities and limitations of LLMs in semiconductor layout design tasks. We evaluate the baseline performance of state-of-the-art LLMs and document an iterative design process with multimodal inputs. We then introduce a novel Neuro-inspired LLM Reasoning Network architecture called SOLOMON. This architecture doesn't rely on particular LLMs, allowing for easy replacement of underlying models while retaining learned domain knowledge through Retrieval-Augmented Generation (RAG) and prompt tuning. Our approach improves reasoning capabilities, mitigates hallucinations, and offers a more flexible solution for adapting to specialized domains. This work contributes to the broader discussion on creating adaptive foundation models that can efficiently incorporate domain-specific knowledge and personalization without the need for constant fine-tuning.
 
 \section{Baseline LLM Performance in Layout Design}
 
