@@ -236,7 +236,7 @@ This section provides a detailed breakdown of the errors encountered during the 
 
 The prevalence of this error indicates that GPT-4o and Claude-3.5-Sonnet attempted to provide GUI output, which was unavailable in the runtime environment. However, this issue stems from a lack of specification about the runtime environment in the prompt, rather than being entirely the LLMs' fault.
 
-To ensure a fair comparison, we re-ran all generated code with `LayoutViewer` lines commented out. The analysis presented in Figure \ref{fig:baseline-llm-performance} and the following breakdown reflect these adjusted results.
+To ensure a fair comparison, we re-ran all generated code with `LayoutViewer` lines commented out. The analysis presented in Figure \ref{fig:performance_comparison} and the following breakdown reflect these adjusted results.
 
 Other common errors included hallucinations of nonexistent `gdspy` functions or methods, resulting in various `AttributeErrors` (e.g., `'CrossSection'`, `'Circular'`, `'Ellipse'`) and `TypeErrors`. Some errors were due to spelling mistakes, such as misspelling \textit{gdspy.Text} as \textit{gdspy.text}.
 
@@ -320,7 +320,7 @@ In some cases, we observed that the LLM results mainly fell into two categories.
 \subsection{Via Connection Test Cases}
 \label{appendix:via_connection}
 
-Figure \ref{fig:sketch} shows the sketch used in all via connection test cases discussed in Section \ref{sec:multimodal_inputs}.
+Figure \ref{fig:sketch} shows the sketch used in all via connection test cases discussed in Section \ref{sec:problem}.
 
 \begin{figure}[h]
 \centering
@@ -338,11 +338,11 @@ Figure \ref{fig:sketch} shows the sketch used in all via connection test cases d
 
 \textbf{Test 3:} "I have a sketch idea that i want to draw in GDSII, generate the python code for this design. each color represents an individual layer. we want use to connect two vias using a piece of metal and put a circular padding on top of each via"
 
-Figure \ref{fig:test3_chat} illustrates the iterative prompting process for Test 3, as discussed in Section \ref{sec:multimodal_inputs}.
+Figure \ref{fig:test3_chat} illustrates the iterative prompting process for Test 3, as discussed in Section \ref{sec:problem}.
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=0.5\linewidth]{Styles/Test3.png}
+\includegraphics[width=0.5\linewidth]{Test3.png}
 \caption{Test 3 - Iterations to guide the model to generate desired output}
 \label{fig:test3_chat}
 \end{figure}
