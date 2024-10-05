@@ -119,33 +119,27 @@ The results demonstrate that the SOLOMON architecture significantly improves the
 
 The second most notable problem in baseline is scaling errors. We intentionally requested basic shapes to be drawn in millimeters to test whether LLMs could catch this trap (as the default unit in the gdspy library is micrometers). Besides that sometimes LLMs failed to pay attention to this trap and produced incorrect results, another big contribution of errors comes from LLMs inherent bias: even if they noticed the unit request, they would hallucinate the default unit of gdspy library to something incorrect: Llama models tended to assume millimeters, Claude models sometimes defaulted to nanometers, while GPT-4o occasionally interpreted the default unit as meters. This especially problemtic for Llama-3 models, who sometimes even insisted that the user had made a mistake by requesting millimeters, and proceeded to draw in micrometers instead, justifying this choice with comments like ``not mm, as the GDSII format is in micrometers''. This type of ``arrogant'' behavior and misalignment with human instructions on simple tasks could be harmful for deploying LLMs as fully autonomous AI agents. A recent Nature paper \cite{ZhouNature2024} has also discussed similar observations. 
 
-With the SOLOMON architecture, even when Llama-3 models acting as the Thought Assessor, because now they can see alternative perspectives from different models, they are less ``stubborn'' and more likely to produce correct results. Similarly, SOLOMON instances demonstrate better performance in handling shape errors and partial correctness issues, as the Thought Assessor can detect and rectify errors stemming from arithmetic miscalculations or incorrect relative positioning of shapes.
+With the SOLOMON architecture, even when Llama-3 models acting as the Thought Assessor, because now they can see alternative perspectives from different models, they are less ``stubborn'' and more likely to produce correct results. Similarly, SOLOMON instances demonstrate better performance in handling shape errors and partial correctness issues, as the Thought Assessor can detect and rectify errors stemming from arithmetic miscalculations or incorrect relative positioning of shapes. See Appendix \ref{appendix:baseline_errors} for more details.  
 
 Comparing SOLOMON instances with o1-preview, we find that SOLOMON achieves comparable or superior results. All SOLOMON instances outperformed o1-preview in Basic Shape 1 categories, with the Claude-3.5-Sonnet-based SOLOMON surpassing o1-preview in 3 categories overall.
 
 Analysis of SOLOMON errors reveals that performance depends heavily on the quality and consensus of initial thoughts. Tasks with ambiguous requirements often leads to significant disagreement among initial thoughts, leading to confusion of Thought Assessor and degraded performance. Additionally, insufficient information linking images to corresponding code and error logs sometimes resulted in misinterpretations. These areas present opportunities for future improvements to the SOLOMON architecture.
 
 \section{Conclusion and Future Work}
-The introduction of the SOLOMON architecture significantly improved performance, particularly in reducing runtime errors and enhancing spatial reasoning capabilities. However, challenges remain in translating domain knowledge into practical design requirements.
+The introduction of the SOLOMON architecture significantly improved performance in semiconductor layout design tasks, particularly in reducing runtime errors and enhancing spatial reasoning capabilities. Our experiments demonstrated that SOLOMON instances outperformed their baseline LLM counterparts across various task categories, with some instances even surpassing the state-of-the-art o1-preview model in certain areas. This improvement validates the effectiveness of our neuro-inspired approach in enhancing LLMs' adaptability to domain-specific applications.
 
-Future research directions include:
-(1) Creating more comprehensive benchmark datasets for LLM capabilities in layout design tasks.
-(2) Linking the pngs with cooresponding code and error log in the thoughts, to evaluate further improvement.
-(3) Investigate the optimal number and combination of input thoughts to the SOLOMON system.
-(4) Invesitgate the performance of SOLOMON architecture when the initial thoughts are not of high quality. How to conduct goal-oriented iterative learning to improve the quality of initial thoughts with feedback loop.
-(5) Apply SOLOMON architecture on more domain specific tasks, such as power grid design, and mechanical design.
-(6) We didn't invesitgate the problem of extracting domain specific knowledge from the LLM in this paper. But by stacking multiple SOLOMON layers, we can form a hierarchical reasoning model, with the ability of recalling and reasoning domain knowledge for solving the task on hand.
+However, challenges remain in translating domain knowledge into practical design requirements. Our via connection experiment revealed that while LLMs can accurately recite textbook definitions of domain-specific concepts, they struggle to extract and apply expert knowledge to solve practical tasks. Investigating the potential of stacking multiple SOLOMON layers to form a hierarchical reasoning model capable of recalling and reasoning with domain knowledge for task-solving is one of our major future focus.
 
+Other future research directions include:
+(1) Developing more comprehensive benchmark datasets for evaluating LLM capabilities in layout design tasks.
+(2) Improving the linking between generated images, corresponding code, and error logs in the thoughts to enhance the Thought Assessor's interpretation abilities.
+(3) Investigating the optimal number and combination of input thoughts for the SOLOMON system to maximize performance.
+(4) Exploring SOLOMON's performance when initial thoughts are of lower quality, and developing goal-oriented iterative learning mechanisms to improve thought quality through feedback loops.
+(5) Applying the SOLOMON architecture to a broader range of domain-specific tasks, such as power grid design and mechanical design.
 
-(2) Exploring more configurations of SOLOMON architecture to understand the interaction between quality of initial thoughts vs assessment by ensemble, i.e., system 1 vs system 2 contributions in reasoning tasks.
-(3) Exploring stacking layers of SOLOMON architecture to form a hierarchical reasoning model, for recalling and reasoning domain knowledge for solving the task on hand.
-(4) Exploring the adaptability of SOLOMON architecture across different domains.
+In conclusion, while our results demonstrate the promise of LLMs as layout design copilots, further advancements in reasoning capabilities and domain knowledge application are necessary for their effective integration into semiconductor design processes and other specialized domains. The SOLOMON architecture represents a significant step towards creating more adaptive and capable AI systems for complex, domain-specific applications.
 
-In conclusion, the experimental results validate the effectiveness of the SOLOMON architecture in enhancing the spatial reasoning capabilities and adaptability of LLMs for semiconductor layout design tasks. The significant performance improvements, particularly in reducing runtime errors and enhancing spatial reasoning capabilities, highlight the potential of this neuro-inspired approach in advancing the field of adaptive foundation models. The comparable performance of SOLOMON to the state-of-the-art o1-preview model further demonstrates its capability in tackling complex spatial reasoning tasks. As the SOLOMON architecture continues to evolve and incorporate advancements in LLMs and domain-specific knowledge, it holds promise for revolutionizing the field of semiconductor design and other domains that require robust spatial reasoning abilities.
-
-While LLMs show promise as layout design copilots, further advancements in reasoning capabilities and domain knowledge application are necessary for their effective integration into semiconductor design processes and other domain specific tasks.
-
-\textbf{Acknowledgment:} We thank Kuan Yu Hsieh for her valuable contribution in creating the dataset of 25 tasks with ground truth and her exploration work on the via connection test cases.
+\paragraph{Acknowledgment:} We thank Kuan Yu Hsieh for her valuable contribution in creating the dataset of 25 tasks with ground truth and her exploration work on the via connection test cases.
 
 \bibliographystyle{plainnat}
 \bibliography{bibliography}
